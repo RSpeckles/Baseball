@@ -100,7 +100,6 @@ void MainWindow::csv_to_df(std::string path, QMap<QString, QMap<QString, string>
 
     char buffer[1024];
     int numCols = 0;
-    QVector<string> colNames;
 
     csv.getline(buffer, 1024);
 
@@ -114,12 +113,44 @@ void MainWindow::csv_to_df(std::string path, QMap<QString, QMap<QString, string>
     cout << temp << endl;
     for (int i = 1; i < numCols; i++){
         temp = strtok(NULL, ",");
-        colNames.append(temp);
+        infoDf[temp];
         cout << temp << endl;
     }
 
     char ch;
     // string buffer;
     unsigned quotes = 0, count = 0;
-    string row, col, val;
+
+
+
+    // csv.ignore(1000, '\n');
+    // while ((ch = csv.get()) != EOF) {
+    //     if (ch == ',' && quotes % 2 == 0) {
+    //         switch (count % 2) {
+    //         case 0:
+    //             row.assign(buffer);
+    //             break;
+    //         case 1:
+    //             col.assign(buffer);
+    //             break;
+    //         }
+    //         count += 1;
+    //         buffer.assign("");
+    //     }
+
+    //     else if (ch == '\n') {
+    //         val.assign(buffer);
+    //         buffer.assign("");
+    //         // cout << row << " - " << col << " - " << val << endl;
+    //         dataframe[QString::fromStdString(row)][QString::fromStdString(col)] = std::stof(val);
+    //     }
+
+    //     else if (ch == '\"') {
+    //         quotes += 1;
+    //     }
+
+    //     else {
+    //         buffer += ch;
+    //     }
+    // }
 }
