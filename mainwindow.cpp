@@ -89,7 +89,7 @@ void MainWindow::csv_to_table(std::string path, QMap<QString, QMap<QString, doub
     }
 }
 
-void MainWindow::csv_to_df(std::string path, QMap<QString, QMap<QString, string>> &dataframe)
+void MainWindow::csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &dataframe)
 {
     cout << "AAA" << endl;
     ifstream csv(path);
@@ -100,6 +100,7 @@ void MainWindow::csv_to_df(std::string path, QMap<QString, QMap<QString, string>
 
     char buffer[1024];
     int numCols = 0;
+    QVector<QString> colNames;
 
     csv.getline(buffer, 1024);
 
@@ -111,46 +112,41 @@ void MainWindow::csv_to_df(std::string path, QMap<QString, QMap<QString, string>
 
     char * temp = strtok(buffer, ",");
     cout << temp << endl;
-    for (int i = 1; i < numCols; i++){
+    for (int i = 1; i <= numCols; i++){
         temp = strtok(NULL, ",");
-        infoDf[temp];
+        colNames.append(temp);
         cout << temp << endl;
     }
 
     char ch;
-    // string buffer;
+    string strBuffer, row;
     unsigned quotes = 0, count = 0;
 
+    QVector<QString>::Iterator iter = colNames.begin();
+
+    while ((ch = csv.get()) != EOF) {
+        if ((ch == ',' && quotes % 2 == 0)) {
+            if (iter == colNames.begin()){
+                row = strBuffer;
+                infoDf[QString::fromStdString(row)];
+                cout << "AA" << endl;
+            }
+            // cout << infoDf[row].first().toStdString() << endl;
+             cout << strBuffer << endl;
+            infoDf[QString::fromStdString(row)][*iter] = QString::fromStdString(strBuffer);
+            iter++;
+            strBuffer = "";
+        }
+        else if (ch == '\n'){
+            iter = colNames.begin();
+        }
+        else if (ch == '\"') {
+            quotes += 1;
+        }
 
 
-    // csv.ignore(1000, '\n');
-    // while ((ch = csv.get()) != EOF) {
-    //     if (ch == ',' && quotes % 2 == 0) {
-    //         switch (count % 2) {
-    //         case 0:
-    //             row.assign(buffer);
-    //             break;
-    //         case 1:
-    //             col.assign(buffer);
-    //             break;
-    //         }
-    //         count += 1;
-    //         buffer.assign("");
-    //     }
-
-    //     else if (ch == '\n') {
-    //         val.assign(buffer);
-    //         buffer.assign("");
-    //         // cout << row << " - " << col << " - " << val << endl;
-    //         dataframe[QString::fromStdString(row)][QString::fromStdString(col)] = std::stof(val);
-    //     }
-
-    //     else if (ch == '\"') {
-    //         quotes += 1;
-    //     }
-
-    //     else {
-    //         buffer += ch;
-    //     }
-    // }
+        else {
+            strBuffer += ch;
+        }
+    }
 }
