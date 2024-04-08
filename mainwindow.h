@@ -24,7 +24,6 @@ private:
     QMap<QString, QMap<QString, double>> distTable;
     QMap<QString, QMap<QString, QString>> infoDf;
 
-    void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &dataframe);
-    void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &dataframe);
+
 };
 #endif // MAINWINDOW_H
