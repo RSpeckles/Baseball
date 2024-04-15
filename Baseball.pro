@@ -14,7 +14,8 @@ SOURCES += \
 
 HEADERS += \
     mainwindow.h \
-    parser.h
+    parser.h \
+    pathing.h
 
 FORMS += \
     mainwindow.ui
