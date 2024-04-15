@@ -100,7 +100,6 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
             if (iter == colNames.begin()){
                 row = strBuffer;
                 dataframe[QString::fromStdString(row)];
-                cout << "AA" << endl;
             }
             // cout << infoDf[row].first().toStdString() << endl;
             cout << strBuffer << endl;
