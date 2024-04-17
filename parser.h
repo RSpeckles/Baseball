@@ -27,9 +27,7 @@ void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &datafr
         if (ch == ',' && quotes % 2 == 0) {
             switch (count % 2) {
             case 0:
-                // cout << "Case 0" << endl;
                 row.assign(buffer);
-                // cout << "ROW: " << row << endl;
                 break;
             case 1:
                 // cout << "Case 1" << endl;
@@ -45,7 +43,7 @@ void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &datafr
             val.assign(buffer);
             // cout << "VAL: " << val << endl;
             buffer.assign("");
-            cout << row << " - " << col << " - " << val << endl;
+            // cout << row << " - " << col << " - " << val << endl;
             dataframe[QString::fromStdString(row)][QString::fromStdString(col)] = std::stof(val);
         }
 
@@ -61,7 +59,7 @@ void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &datafr
 
 void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &dataframe)
 {
-    cout << "AAA" << endl;
+    // cout << "AAA" << endl;
     ifstream csv(path);
 
     if (!csv) {
@@ -81,11 +79,11 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
     }
 
     char *temp = strtok(buffer, ",");
-    cout << temp << endl;
+    // cout << temp << endl;
     for (int i = 1; i <= numCols; i++) {
         temp = strtok(NULL, ",");
         colNames.append(temp);
-        cout << temp << endl;
+        // cout << temp << endl;
     }
 
     char ch;
@@ -101,7 +99,7 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
                 dataframe[QString::fromStdString(row)];
             }
             // cout << infoDf[row].first().toStdString() << endl;
-            cout << strBuffer << endl;
+            // cout << strBuffer << endl;
             dataframe[QString::fromStdString(row)][*iter] = QString::fromStdString(strBuffer);
             iter++;
             strBuffer = "";
