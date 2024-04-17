@@ -56,7 +56,6 @@ void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &datafr
         else {
             buffer += ch;
         }
-
     }
 }
 
@@ -75,15 +74,15 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
 
     csv.getline(buffer, 1024);
 
-    for (int i = 0; i < strlen(buffer); i++){
-        if (buffer[i] == ','){
-            numCols ++;
+    for (int i = 0; i < strlen(buffer); i++) {
+        if (buffer[i] == ',') {
+            numCols++;
         }
     }
 
-    char * temp = strtok(buffer, ",");
+    char *temp = strtok(buffer, ",");
     cout << temp << endl;
-    for (int i = 1; i <= numCols; i++){
+    for (int i = 1; i <= numCols; i++) {
         temp = strtok(NULL, ",");
         colNames.append(temp);
         cout << temp << endl;
@@ -97,7 +96,7 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
 
     while ((ch = csv.get()) != EOF) {
         if ((ch == ',' && quotes % 2 == 0)) {
-            if (iter == colNames.begin()){
+            if (iter == colNames.begin()) {
                 row = strBuffer;
                 dataframe[QString::fromStdString(row)];
             }
@@ -106,21 +105,16 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
             dataframe[QString::fromStdString(row)][*iter] = QString::fromStdString(strBuffer);
             iter++;
             strBuffer = "";
-        }
-        else if (ch == '\n'){
+        } else if (ch == '\n') {
             iter = colNames.begin();
-        }
-        else if (ch == '\"') {
+        } else if (ch == '\"') {
             quotes += 1;
         }
-
 
         else {
             strBuffer += ch;
         }
     }
 }
-
-
 
 #endif // PARSER_H
