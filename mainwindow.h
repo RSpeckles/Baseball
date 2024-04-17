@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <string>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -18,12 +17,21 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    // initializers
+    // uhh no initialize functions yet lololol
+
+    // connections
+    void changePage();
+    void changePage(QString specific);
+    void adminLogin();
+
+private slots:
+
 private:
     Ui::MainWindow *ui;
 
     QMap<QString, QMap<QString, double>> distTable;
     QMap<QString, QMap<QString, QString>> infoDf;
-
-
 };
 #endif // MAINWINDOW_H
