@@ -73,13 +73,17 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
     csv.getline(buffer, 1024);
 
     for (int i = 0; i < strlen(buffer); i++) {
+        cout << buffer[i] << " ";
         if (buffer[i] == ',') {
             numCols++;
         }
     }
+    cout << endl;
 
-    char *temp = strtok(buffer, ",");
-    // cout << temp << endl;
+    char *temp = strtok(buffer, "¿");
+    temp = strtok(NULL, ",");
+    colNames.append(temp);
+    cout << temp << endl;
     for (int i = 1; i <= numCols; i++) {
         temp = strtok(NULL, ",");
         colNames.append(temp);
@@ -98,7 +102,7 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
                 row = strBuffer;
                 dataframe[QString::fromStdString(row)];
             }
-            // cout << infoDf[row].first().toStdString() << endl;
+            // cout << dataframe[row].first().toStdString() << endl;
             // cout << strBuffer << endl;
             dataframe[QString::fromStdString(row)][*iter] = QString::fromStdString(strBuffer);
             iter++;
@@ -113,6 +117,7 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
             strBuffer += ch;
         }
     }
+    cout << dataframe["Arizona Diamondbacks"]["League"].toStdString() << endl;
 }
 
 #endif // PARSER_H

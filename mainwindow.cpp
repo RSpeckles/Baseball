@@ -22,21 +22,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     // commented out for now so that i can focus on ui
 
-    // QDir distPath;
+    QDir distPath;
 
-    // cout <<distPath.path().toStdString();
-    // distPath.cdUp();
+    cout <<distPath.path().toStdString();
+    distPath.cdUp();
 
-    // string path = distPath.path().toStdString() + "/Baseball/Distance between stadiums.csv";
-    // cout << path << endl;
-    // csv_to_table(path, distTable);
+    string path = distPath.path().toStdString() + "/Baseball/Distance between stadiums.csv";
+    cout << path << endl;
+    csv_to_table(path, distTable);
 
-    // QDir infoPath;
-    // infoPath.cdUp();
+    QDir infoPath;
+    infoPath.cdUp();
 
-    // path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
-    // cout << path << endl;
-    // csv_to_df(path, infoDf);
+    path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
+    cout << path << endl;
+    csv_to_df(path, infoDf);
 
 }
 
