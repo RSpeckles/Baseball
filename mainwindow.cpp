@@ -1,6 +1,7 @@
 // files
 #include "mainwindow.h"
 #include "parser.h"
+#include "sorter.h"
 #include "ui_mainwindow.h"
 
 // librarires
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent)
     path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
     cout << path << endl;
     csv_to_df(path, infoDf);
+
 }
 
 MainWindow::~MainWindow()
