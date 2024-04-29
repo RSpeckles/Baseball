@@ -25,6 +25,7 @@ public slots:
     void changePage();
     void changePage(QString specific);
     void adminLogin();
+    void sortTeams();
 
 private slots:
 

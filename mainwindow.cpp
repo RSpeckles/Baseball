@@ -8,6 +8,7 @@
 #include <QMapIterator>
 #include <QMessageBox>
 #include <QString>
+#include <QTableWidget>
 #include <iostream>
 #include <string>
 
@@ -21,7 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // commented out for now so that i can focus on ui
-
     QDir distPath;
 
     cout <<distPath.path().toStdString();
@@ -37,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
     path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
     cout << path << endl;
     csv_to_df(path, infoDf);
-
 }
 
 MainWindow::~MainWindow()
@@ -73,7 +72,7 @@ map<QString, QString> buttonMap = {
     // special condition
     // allows us to pass an argument into the function, which dictates which page it wants to go to.
     {"loginSuccess", "adminpanel"},
-};
+
 
 // default changePage function
 void MainWindow::changePage()
@@ -134,4 +133,29 @@ void MainWindow::adminLogin()
     }
     ui->inputPassword->clear();
     ui->inputName->setText("admin");
+}
+
+/*
+ *  INITIALIZERS
+ *
+ *  These functions initialize the UI.
+*/
+
+void initializeTable(QTableWidget *tableUI, vector<std::string> stadiums)
+{
+    // iterate thru teams
+    for (string name : stadiums) {
+
+    }
+}
+
+/*
+ *  SORT TEAMS FUNCTION
+ *
+ *  This function is connected to the columns of the team table widgets.
+*/
+
+void MainWindow::sortTeams()
+{
+
 }

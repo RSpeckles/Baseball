@@ -23,6 +23,12 @@
       <height>621</height>
      </rect>
     </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Sunken</enum>
+    </property>
     <widget class="QWidget" name="home">
      <widget class="QFrame" name="buttonsHome">
       <property name="geometry">
@@ -445,6 +451,143 @@ background-color: rgba(255, 255, 255, 0);</string>
       </property>
       <property name="margin">
        <number>10</number>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tableDisplay">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>781</width>
+        <height>291</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>9</pointsize>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="columnCount">
+       <number>10</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Team Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Stadium Name</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Seating Capacity</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Location</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Playing Surface</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>League</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Date Opened</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Distance to C.F.</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Ballpark Typology</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Roof Type</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>520</y>
+        <width>241</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <item>
+       <property name="text">
+        <string>All</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Major League</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>American League</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>National League</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Open Roof</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Closed Roof</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="labelFilterBy">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>520</y>
+        <width>81</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Filter by:</string>
       </property>
      </widget>
     </widget>
