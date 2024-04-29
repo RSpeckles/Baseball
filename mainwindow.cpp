@@ -6,8 +6,9 @@
 // librarires
 #include <QDir>
 #include <QMapIterator>
-#include <QString>
 #include <QMessageBox>
+#include <QString>
+#include <QTableWidget>
 #include <iostream>
 #include <string>
 
@@ -21,8 +22,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // commented out for now so that i can focus on ui
-    /*
     QDir distPath;
+
+    cout <<distPath.path().toStdString();
     distPath.cdUp();
 
     string path = distPath.path().toStdString() + "/Baseball/Distance between stadiums.csv";
@@ -35,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
     path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
     cout << path << endl;
     csv_to_df(path, infoDf);
-    */
 }
 
 MainWindow::~MainWindow()
@@ -56,34 +57,35 @@ MainWindow::~MainWindow()
 
 map<QString, QString> buttonMap = {
     // buttons
-    {"buttonDisplay",   "display"},
-    {"buttonPlan",      "plan"},
-    {"buttonAdmin",      "adminlogin"},
-    {"buttonStartTrip",      "virtualtrip"},
+    {"buttonDisplay", "display"},
+    {"buttonPlan", "plan"},
+    {"buttonAdmin", "adminlogin"},
+    {"buttonStartTrip", "virtualtrip"},
 
     // back buttons
-    {"backDisplay",     "home"},
-    {"backPlan",     "home"},
-    {"backAdmin",     "home"},
-    {"backLogin",     "home"},
-    {"backVirtualTrip",     "plan"},
+    {"backDisplay", "home"},
+    {"backPlan", "home"},
+    {"backAdmin", "home"},
+    {"backLogin", "home"},
+    {"backVirtualTrip", "plan"},
 
     // special condition
     // allows us to pass an argument into the function, which dictates which page it wants to go to.
-    {"loginSuccess",     "adminpanel"},
-};
+    {"loginSuccess", "adminpanel"},
+    };
 
 // default changePage function
-void MainWindow::changePage() {
+void MainWindow::changePage()
+{
     // get the button object and name that got pressed
-    QObject* senderObject = sender();
+    QObject *senderObject = sender();
     QString senderName = senderObject->objectName();
 
     // check if button is in the map
     if (buttonMap.find(senderName) != buttonMap.end()) {
         // if found, get desired widget and change to it
         QString desiredName = buttonMap.at(senderName);
-        QWidget* desiredWidget = this->findChild<QWidget*>(desiredName);
+        QWidget *desiredWidget = this->findChild<QWidget *>(desiredName);
 
         // "main" is the stacked widget
         this->ui->main->setCurrentWidget(desiredWidget);
@@ -94,12 +96,13 @@ void MainWindow::changePage() {
 }
 
 // changePage function that allows an argument to be passed
-void MainWindow::changePage(QString specific) {
+void MainWindow::changePage(QString specific)
+{
     // check if button is in the map
     if (buttonMap.find(specific) != buttonMap.end()) {
         // if found, get desired widget and change to it
         QString desiredName = buttonMap.at(specific);
-        QWidget* desiredWidget = this->findChild<QWidget*>(desiredName);
+        QWidget *desiredWidget = this->findChild<QWidget *>(desiredName);
 
         this->ui->main->setCurrentWidget(desiredWidget);
     } else {
@@ -117,19 +120,42 @@ void MainWindow::changePage(QString specific) {
 // admin password
 const QString adminPassword = "admin";
 
-void MainWindow::adminLogin() {
+void MainWindow::adminLogin()
+{
     QString password = ui->inputPassword->text();
-    if (password == adminPassword)
-    {
+    if (password == adminPassword) {
         QMessageBox::information(this, "Admin Login", "Login success!");
 
         // change page using existing changePage function
         changePage("loginSuccess");
-    }
-    else
-    {
+    } else {
         QMessageBox::warning(this, "Admin Login", "Password is incorrect.");
     }
     ui->inputPassword->clear();
     ui->inputName->setText("admin");
+}
+
+/*
+ *  INITIALIZERS
+ *
+ *  These functions initialize the UI.
+*/
+
+void initializeTable(QTableWidget *tableUI, vector<std::string> stadiums)
+{
+    // iterate thru teams
+    for (string name : stadiums) {
+
+    }
+}
+
+/*
+ *  SORT TEAMS FUNCTION
+ *
+ *  This function is connected to the columns of the team table widgets.
+*/
+
+void MainWindow::sortTeams()
+{
+
 }
