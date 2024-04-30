@@ -8,6 +8,11 @@
 
 using namespace std;
 
+
+// Sort by. First parameter is dataframe (should be infoDf)
+// Second is aspect to sort by (must be spelled exactly as is in CSV) default is "Team name"
+// Last is what league to include. "Major" (default) includes all teams.
+// "American" only shows American league and "National" only shows National league.
 QVector<QString> sort_by_teams(QMap<QString, QMap<QString, QString>> df, QString sort_by = "Team name", string league = "Major"){
     QVector<QString> teams;
     QVector<QPair<QString, QString>> pairs;
