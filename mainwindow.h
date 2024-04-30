@@ -19,7 +19,7 @@ public:
 
 public slots:
     // initializers
-    // uhh no initialize functions yet lololol
+    void initializeTables();
 
     // connections
     void changePage();
