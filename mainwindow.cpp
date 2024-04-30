@@ -41,6 +41,12 @@ MainWindow::MainWindow(QWidget *parent)
     cout << path << endl;
     csv_to_df(path, infoDf);
 
+    cout << infoDf["Arizona Diamondbacks"]["Team name"].toStdString() << endl;
+    QVector<QString> teams = sort_by_typology(infoDf, "Major");
+
+    // for (auto &it : teams){
+    //     cout << infoDf[it]["Ballpark typology"].toStdString() << endl;
+    // }
 }
 
 MainWindow::~MainWindow()
