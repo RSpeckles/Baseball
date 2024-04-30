@@ -9,6 +9,8 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTableWidget>
+#include <QDebug>
+
 #include <iostream>
 #include <string>
 
@@ -37,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
     path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
     cout << path << endl;
     csv_to_df(path, infoDf);
+
 }
 
 MainWindow::~MainWindow()
@@ -72,7 +75,7 @@ map<QString, QString> buttonMap = {
     // special condition
     // allows us to pass an argument into the function, which dictates which page it wants to go to.
     {"loginSuccess", "adminpanel"},
-
+    };
 
 // default changePage function
 void MainWindow::changePage()
@@ -141,12 +144,49 @@ void MainWindow::adminLogin()
  *  These functions initialize the UI.
 */
 
-void initializeTable(QTableWidget *tableUI, vector<std::string> stadiums)
+void initializeTable(QTableWidget *tableUI, vector<std::string> stadiums, QMap<QString, QMap<QString, QString>> infoDf)
 {
-    // iterate thru teams
-    for (string name : stadiums) {
+    // get headers so that we can insert items in order
+    QMap<QString, int> headers;
+    for(int i = 0; i < tableUI->model()->columnCount(); i++)
+    {
+        QString header = tableUI->model()->headerData(i, Qt::Horizontal).toString().toLower();
+        headers[header] = i;
 
+        //qDebug() << header << ": " << headers[header];
     }
+
+    tableUI->setRowCount(stadiums.size());
+
+    // iterate thru teams
+    int index = 0;
+
+    // iterate through infoDF map
+    for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+    {
+        QString team = it.key();
+        QMap<QString, QString> data = it.value();
+
+        for (auto it = data.cbegin(); it != data.cend(); ++it  )
+        {
+            QString key = it.key().toLower();
+            QString value = it.value();
+            //qDebug() << key;
+
+            // if key is empty then ignore
+            //if (key == "") { continue; }
+
+
+            QTableWidgetItem *data = new QTableWidgetItem(value);
+            tableUI->setItem(index, headers[key], data);
+            //count++;
+        }
+        index++;
+    }
+}
+
+void MainWindow::initializeTables() {
+    initializeTable(this->ui->tableDisplay, stadiums, infoDf);
 }
 
 /*

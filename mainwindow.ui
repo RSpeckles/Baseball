@@ -476,17 +476,17 @@ background-color: rgba(255, 255, 255, 0);</string>
       </property>
       <column>
        <property name="text">
-        <string>Team Name</string>
+        <string>Team name</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Stadium Name</string>
+        <string>Stadium name</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Seating Capacity</string>
+        <string>Seating capacity</string>
        </property>
       </column>
       <column>
@@ -496,7 +496,7 @@ background-color: rgba(255, 255, 255, 0);</string>
       </column>
       <column>
        <property name="text">
-        <string>Playing Surface</string>
+        <string>Playing surface</string>
        </property>
       </column>
       <column>
@@ -506,22 +506,22 @@ background-color: rgba(255, 255, 255, 0);</string>
       </column>
       <column>
        <property name="text">
-        <string>Date Opened</string>
+        <string>Date opened</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Distance to C.F.</string>
+        <string>Distance to center field</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Ballpark Typology</string>
+        <string>Ballpark typology</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Roof Type</string>
+        <string>Roof type</string>
        </property>
       </column>
      </widget>
