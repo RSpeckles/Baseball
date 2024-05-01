@@ -121,7 +121,7 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
             strBuffer += ch;
         }
     }
-    cout << dataframe["Arizona Diamondbacks"]["League"].toStdString() << endl;
+    // cout << dataframe["Arizona Diamondbacks"]["League"].toStdString() << endl;
 }
 
 #endif // PARSER_H
