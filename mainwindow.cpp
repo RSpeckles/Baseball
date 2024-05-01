@@ -49,18 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
     cout << path << endl;
     csv_to_df(path, infoDf);
 
-
-    // Nico 4/30/24 idk what this is and it doesnt work so im commenting it out
-    //cout << infoDf["Arizona Diamondbacks"]["Team name"].toStdString() << endl;
-    //QVector<QString> teams = sort_by_typology(infoDf, "Major");
-
-    // for (auto &it : teams){
-    //     cout << infoDf[it]["Ballpark typology"].toStdString() << endl;
-    // }
-
     QVector<QPair<QString, double>> shortestPath = dijkstra(distTable, "Dodger Stadium", "Fenway Park");
 
     printPath(shortestPath);
+
+
 }
 
 MainWindow::~MainWindow()
