@@ -10,6 +10,8 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTableWidget>
+#include <QDebug>
+
 #include <iostream>
 #include <string>
 
@@ -39,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
     cout << path << endl;
     csv_to_df(path, infoDf);
 
-    cout << infoDf["Arizona Diamondbacks"]["Team name"].toStdString() << endl;
-    QVector<QString> teams = sort_by_typology(infoDf, "Major");
+    // Nico 4/30/24 idk what this is and it doesnt work so im commenting it out
+    //cout << infoDf["Arizona Diamondbacks"]["Team name"].toStdString() << endl;
+    //QVector<QString> teams = sort_by_typology(infoDf, "Major");
 
     // for (auto &it : teams){
     //     cout << infoDf[it]["Ballpark typology"].toStdString() << endl;
@@ -149,12 +152,91 @@ void MainWindow::adminLogin()
  *  These functions initialize the UI.
 */
 
-void initializeTable(QTableWidget *tableUI, vector<std::string> stadiums)
+void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf)
 {
-    // iterate thru teams
-    for (string name : stadiums) {
+    // get headers so that we can insert items in order
+    QMap<QString, int> headers;
+    for(int i = 0; i < tableUI->model()->columnCount(); i++)
+    {
+        QString header = tableUI->model()->headerData(i, Qt::Horizontal).toString().toLower();
+        headers[header] = i;
 
+        //qDebug() << header << ": " << headers[header];
     }
+
+    // reset
+    tableUI->clearContents();
+    tableUI->setRowCount(teams.size());
+    tableUI->setSortingEnabled(true);
+
+    // iterate thru teams
+    int index = 0;
+    int totalCapacity = 0;
+    // iterate through infoDF map
+    for (QString name : teams)
+    {
+        // if team doesnt exist in data, continue
+        if (infoDf.find(name) == infoDf.end()) {
+            qDebug() << "Missing in info dataframe: " << name;
+            continue;
+        }
+        QMap<QString, QString> data = infoDf.value(name);
+        //qDebug() << data;
+
+        for (auto it = data.cbegin(); it != data.cend(); ++it  )
+        {
+            QString key = it.key().toLower();
+            QString value = it.value();
+            //qDebug() << key;
+
+            // if key is empty then ignore
+            //if (key == "") { continue; }
+
+
+            QTableWidgetItem *data = new QTableWidgetItem(value);
+            tableUI->setItem(index, headers[key], data);
+            //count++;
+
+            // get total capacity
+            if (key == "seating capacity") {
+                totalCapacity += value.toInt();
+            }
+        }
+        index++;
+    }
+
+    totalUI->setText(
+        "Total Teams: " + QString::number(teams.size())
+        + "\nTotal Capacity: " + QString::number(totalCapacity)
+        );
+
+    /* OLD
+    for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+    {
+        QString team = it.key();
+        QMap<QString, QString> data = it.value();
+
+        for (auto it = data.cbegin(); it != data.cend(); ++it  )
+        {
+            QString key = it.key().toLower();
+            QString value = it.value();
+            //qDebug() << key;
+
+            // if key is empty then ignore
+            //if (key == "") { continue; }
+
+
+            QTableWidgetItem *data = new QTableWidgetItem(value);
+            tableUI->setItem(index, headers[key], data);
+            //count++;
+        }
+        index++;
+    }
+    */
+}
+
+void MainWindow::initializeTables() {
+    initializeTable(this->ui->tableDisplay, this->ui->totalDisplay, stadiums, infoDf);
 }
 
 /*
@@ -163,7 +245,27 @@ void initializeTable(QTableWidget *tableUI, vector<std::string> stadiums)
  *  This function is connected to the columns of the team table widgets.
 */
 
-void MainWindow::sortTeams()
-{
+// takes the text from the combo box and converts it to data for the function to read
+map<QString, QString> filterMap = {
+    {"Major League", "Major"},
+    {"National League", "National"},
+    {"American League", "American"},
+    {"Open Roof", "Open"},
+    {"Greatest Distance to Center Field", "GreatestCF"},
+    {"Shortest Distance to Center Field", "ShortestCF"},
+    };
 
+void MainWindow::filterTeams()
+{
+    QString filter = ui->filterDisplay->currentText();
+    //qDebug() << filter;
+
+    // checks if filter exists, else return
+    if (filterMap.find(filter) == filterMap.end()) { return; }
+
+    // get filtered teams
+    QVector<QString> filteredTeams = sort_by_teams(infoDf, "Team name", filterMap.at(filter).toStdString());
+
+    // modify ui
+    initializeTable(this->ui->tableDisplay, this->ui->totalDisplay, filteredTeams, infoDf);
 }
