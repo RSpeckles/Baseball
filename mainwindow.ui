@@ -459,7 +459,7 @@ background-color: rgba(255, 255, 255, 0);</string>
         <x>10</x>
         <y>220</y>
         <width>781</width>
-        <height>291</height>
+        <height>271</height>
        </rect>
       </property>
       <property name="font">
@@ -525,12 +525,12 @@ background-color: rgba(255, 255, 255, 0);</string>
        </property>
       </column>
      </widget>
-     <widget class="QComboBox" name="comboBox">
+     <widget class="QComboBox" name="filterDisplay">
       <property name="geometry">
        <rect>
-        <x>550</x>
+        <x>10</x>
         <y>520</y>
-        <width>241</width>
+        <width>311</width>
         <height>28</height>
        </rect>
       </property>
@@ -540,11 +540,6 @@ background-color: rgba(255, 255, 255, 0);</string>
         <pointsize>12</pointsize>
        </font>
       </property>
-      <item>
-       <property name="text">
-        <string>All</string>
-       </property>
-      </item>
       <item>
        <property name="text">
         <string>Major League</string>
@@ -567,15 +562,20 @@ background-color: rgba(255, 255, 255, 0);</string>
       </item>
       <item>
        <property name="text">
-        <string>Closed Roof</string>
+        <string>Greatest Distance to Center Field</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Shortest Distance to Center Field</string>
        </property>
       </item>
      </widget>
      <widget class="QLabel" name="labelFilterBy">
       <property name="geometry">
        <rect>
-        <x>470</x>
-        <y>520</y>
+        <x>10</x>
+        <y>490</y>
         <width>81</width>
         <height>31</height>
        </rect>
@@ -588,6 +588,29 @@ background-color: rgba(255, 255, 255, 0);</string>
       </property>
       <property name="text">
        <string>Filter by:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="totalDisplay">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>490</y>
+        <width>181</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Total Teams: 30 
+Total Capacity: 3213</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </widget>
@@ -1380,9 +1403,26 @@ background-color: rgba(255, 255, 255, 0);</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>filterDisplay</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>filterTeams()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>600</x>
+     <y>514</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>875</x>
+     <y>527</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changePage()</slot>
   <slot>adminLogin()</slot>
+  <slot>filterTeams()</slot>
  </slots>
 </ui>

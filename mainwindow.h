@@ -25,7 +25,7 @@ public slots:
     void changePage();
     void changePage(QString specific);
     void adminLogin();
-    void sortTeams();
+    void filterTeams();
 
 private slots:
 
@@ -34,7 +34,7 @@ private:
 
     QMap<QString, QMap<QString, double>> distTable;
     QMap<QString, QMap<QString, QString>> infoDf;
-    std::vector<std::string> stadiums = {"Arizona Diamondbacks",
+    QVector<QString> stadiums = {"Arizona Diamondbacks",
                                          "Atlanta Braves",
                                          "Baltimore Orioles",
                                          "Boston Red Sox",
