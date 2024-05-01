@@ -83,7 +83,7 @@ map<QString, QString> buttonMap = {
     // special condition
     // allows us to pass an argument into the function, which dictates which page it wants to go to.
     {"loginSuccess", "adminpanel"},
-    };
+};
 
 // default changePage function
 void MainWindow::changePage()

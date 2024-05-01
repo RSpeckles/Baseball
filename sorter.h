@@ -39,6 +39,7 @@ void getGreatestAndShortestCF(QMap<QString, QMap<QString, QString>> df, int &gre
     }
 }
 
+
 // Sort by. First parameter is dataframe (should be infoDf)
 // Second is aspect to sort by (must be spelled exactly as is in CSV) default is "Team name"
 // Last is what league to include. "Major" (default) includes all teams.
