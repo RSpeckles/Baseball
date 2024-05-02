@@ -197,8 +197,7 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
 
             // if key is empty then ignore
             //if (key == "") { continue; }
-
-
+          
             QTableWidgetItem *data = new QTableWidgetItem(value);
             tableUI->setItem(index, headers[key], data);
             //count++;
