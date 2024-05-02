@@ -10,6 +10,8 @@
 #include <QMessageBox>
 #include <QString>
 #include <QTableWidget>
+#include <QListWidget>
+#include <QMessageBox>
 #include <QDebug>
 
 #include <iostream>
@@ -152,8 +154,12 @@ void MainWindow::adminLogin()
  *  These functions initialize the UI.
 */
 
+// initialize table
 void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf)
 {
+    // set sorting to false so doesnt break
+    tableUI->setSortingEnabled(false);
+
     // get headers so that we can insert items in order
     QMap<QString, int> headers;
     for(int i = 0; i < tableUI->model()->columnCount(); i++)
@@ -167,7 +173,6 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
     // reset
     tableUI->clearContents();
     tableUI->setRowCount(teams.size());
-    tableUI->setSortingEnabled(true);
 
     // iterate thru teams
     int index = 0;
@@ -181,7 +186,7 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
             continue;
         }
         QMap<QString, QString> data = infoDf.value(name);
-        //qDebug() << data;
+        qDebug() << name;
 
         for (auto it = data.cbegin(); it != data.cend(); ++it  )
         {
@@ -210,6 +215,9 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
         + "\nTotal Capacity: " + QString::number(totalCapacity)
         );
 
+    // enable sorting again
+    tableUI->setSortingEnabled(true);
+
     /* OLD
     for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
     {
@@ -235,8 +243,26 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
     */
 }
 
-void MainWindow::initializeTables() {
+// initalize lists
+void initializeList(QListWidget *listUI, QMap<QString, QMap<QString, QString>> infoDf)
+{
+    listUI->clear();
+    // iterate through teams
+    for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+    {
+        QString team = it.key();
+        listUI->addItem(it.value()["Team name"]);
+    }
+}
+
+// define admin stuff
+void initializeAttributes(QComboBox *comboUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf);
+
+// init func
+void MainWindow::initialize() {
     initializeTable(this->ui->tableDisplay, this->ui->totalDisplay, stadiums, infoDf);
+    initializeList(this->ui->adminList, infoDf);
+    initializeAttributes(this->ui->attributeCombo, stadiums, infoDf);
 }
 
 /*
@@ -268,4 +294,170 @@ void MainWindow::filterTeams()
 
     // modify ui
     initializeTable(this->ui->tableDisplay, this->ui->totalDisplay, filteredTeams, infoDf);
+}
+
+/*
+ *  ADMIN STUFF
+ *
+ *  Admin functions
+*/
+
+void initializeAttributes(QComboBox *comboUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf) {
+    // disable so that "textChanged" connection doesnt loop forever
+    comboUI->setEnabled(false);
+
+    // iterate through teams
+    qDebug() << teams[1];
+    for (auto it = infoDf[teams[1]].cbegin(); it != infoDf[teams[1]].cend(); ++it  )
+    {
+        QString attribute = it.key();
+        comboUI->addItem(attribute);
+    }
+
+    // reenable
+    comboUI->setEnabled(true);
+}
+
+QString updateValue(QString attribute, QString team, QMap<QString, QMap<QString, QString>> infoDf) {
+    // make sure team and attribute exist when updating value
+    if (infoDf.find(team) != infoDf.end()) {
+        if (infoDf[team].find(attribute) != infoDf[team].end()) {
+            return infoDf[team][attribute];
+        }
+    }
+    return "null";
+}
+
+QString currentTeam = "";
+void MainWindow::adminTeamSelected()
+{
+    // checks
+    if (!this->ui->attributeCombo->isEnabled()) { return; }
+    if (this->ui->adminList->currentRow() == -1) { return; }
+
+    // get name of team selected
+    currentTeam = this->ui->adminList->currentItem()->text();
+
+    // check if string is empty
+    if (currentTeam.size() <= 0) { return; }
+
+    // if currentTeam doesnt exist in infoDf, its possible that the name was changed in the UI.
+    // to fix this, we need to iterate through all of infoDf to check the "Team name" value.
+    // if theres a match, then we take the string of the key and set that to currentTeam
+    if (infoDf.find(currentTeam) == infoDf.end()) {
+        for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+        {
+            if (it.value()["Team name"] == currentTeam) {
+                currentTeam = it.key();
+            }
+        }
+    }
+
+    // update value
+    QString currentAttribute = this->ui->attributeCombo->currentText();
+    this->ui->attributeEdit->setText(updateValue(currentAttribute, currentTeam, infoDf));
+}
+
+// map that uses attributes as the key to check for errors
+QMap<QString, function<bool(QString&, MainWindow*, QMap<QString, QMap<QString, QString>>)>> editChecks = {
+    {"Seating capacity", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+        {
+            bool conversionOK;
+            int value = attribute.toInt(&conversionOK);
+            if (!conversionOK) {
+                QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
+                return false;
+            }
+            if (value <= 0) {
+                QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
+                return false;
+            }
+            return true;
+        }
+    },
+    {"League", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+        {
+        if (attribute != "National" && attribute != "American") {
+            QMessageBox::warning(mainWindow, "Admin Edit", "Please enter National or American!");
+            return false;
+        }
+        return true;
+        }
+    },
+    {"Date opened", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+        {
+        bool conversionOK;
+        int value = attribute.toInt(&conversionOK);
+        if (!conversionOK) {
+             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
+             return false;
+        }
+        if (value <= 0) {
+             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
+             return false;
+        }
+        return true;
+        }
+    },
+    {"Distance to center field", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+        {
+         bool conversionOK;
+         int value = attribute.toInt(&conversionOK);
+         if (!conversionOK) {
+             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
+             return false;
+         }
+         if (value <= 0) {
+             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
+             return false;
+         }
+         int meters = value / 3.281; // google told me this
+         attribute = attribute + " feet (" + QString::number(meters) + " m)";
+
+         return true;
+     }
+    },
+    {"Team name", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+        {
+        for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+        {
+            if (it.value()["Team name"] == attribute) {
+                QMessageBox::warning(mainWindow, "Admin Edit", "Team name already exists!");
+                return false;
+            }
+        }
+
+            return true;
+        }
+    },
+};
+
+
+void MainWindow::adminConfirmEdit(){
+    QString newValue = this->ui->attributeEdit->text();
+    QString currentAttribute = this->ui->attributeCombo->currentText();
+
+    //qDebug() << newValue;
+
+    // if there is an attribute checker
+    if (editChecks.find(currentAttribute) != editChecks.end()) {
+        bool isValid = editChecks[currentAttribute](newValue, this, infoDf);
+
+        // if input is invalid, reset value and return
+        if (isValid == false) {
+            this->ui->attributeEdit->setText(updateValue(currentAttribute, currentTeam, infoDf));
+            return;
+        }
+    }
+
+    // finally, check if team and attribute exists in infoDf and make changes
+    if (infoDf.find(currentTeam) == infoDf.end()) { return; }
+    if (infoDf[currentTeam].find(currentAttribute) == infoDf[currentTeam].end()) { return; }
+
+    infoDf[currentTeam][currentAttribute] = newValue;
+    this->ui->attributeEdit->setText(updateValue(currentAttribute, currentTeam, infoDf));
+    QMessageBox::information(this, "Admin Edit", "Edit success! \n" + currentAttribute + " set to " + newValue);
+
+    // update everything lol
+    this->initialize();
 }
