@@ -19,13 +19,17 @@ public:
 
 public slots:
     // initializers
-    void initializeTables();
+    void initialize();
 
     // connections
     void changePage();
     void changePage(QString specific);
     void adminLogin();
     void filterTeams();
+
+    // admin
+    void adminTeamSelected();
+    void adminConfirmEdit();
 
 private slots:
 
@@ -35,6 +39,7 @@ private:
     QMap<QString, QMap<QString, double>> distTable;
     QMap<QString, QMap<QString, double>> souvenirTable;
     QMap<QString, QMap<QString, QString>> infoDf;
+
     QVector<QString> stadiums = {"Arizona Diamondbacks",
                                          "Atlanta Braves",
                                          "Baltimore Orioles",

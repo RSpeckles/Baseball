@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     window.show();
 
     // initialize
-    window.initializeTables();
+    window.initialize();
 
     return a.exec();
 }
