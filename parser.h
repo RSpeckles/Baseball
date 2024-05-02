@@ -121,7 +121,64 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
             strBuffer += ch;
         }
     }
-    cout << dataframe["Arizona Diamondbacks"]["League"].toStdString() << endl;
+    // cout << dataframe["Arizona Diamondbacks"]["League"].toStdString() << endl;
 }
+
+
+//Write stuff to CSV file from dataframe
+//First parameter is full path of file you want to write to
+//Second parameter is dataframe map you're writing from
+//Last parameter is title of rows. Write as one string, with titles separated by commas. No Spaces
+//eg. "Team name,Souvenir,Cost"
+void df_to_csv(string path,
+               QMap<QString, QMap<QString, double>> const dataframe,
+               QString label)
+{
+    ofstream csv;
+    cout << path << endl;
+    csv.open(path);
+
+    if (!csv) {
+        cout << "Could not open file! :(" << endl;
+        return;
+    }
+
+    csv << label.toStdString() << "\n";
+
+    for (auto i = dataframe.begin(); i != dataframe.end(); i++) {
+        for (auto j = i->begin(); j != i->end(); j++) {
+            bool flag = false;
+            foreach (QChar c, i.key()) {
+                if (c == ',') {
+                    flag = true;
+                }
+            }
+
+            if (flag) {
+                csv << "\"" << i.key().toStdString() << "\""
+                    << ",";
+            } else {
+                csv << i.key().toStdString() << ",";
+            }
+
+            flag = false;
+
+            foreach (QChar c, j.key()) {
+                if (c == ',') {
+                    flag = true;
+                }
+            }
+
+            if (flag)
+                csv << "\"" << j.key().toStdString() << "\""
+                    << ",";
+            else
+                csv << j.key().toStdString() << ",";
+
+            csv << fixed << setprecision(2) << j.value() << "\n";
+        }
+    }
+}
+
 
 #endif // PARSER_H

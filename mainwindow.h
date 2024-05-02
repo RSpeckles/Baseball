@@ -37,6 +37,7 @@ private:
     Ui::MainWindow *ui;
 
     QMap<QString, QMap<QString, double>> distTable;
+    QMap<QString, QMap<QString, double>> souvenirTable;
     QMap<QString, QMap<QString, QString>> infoDf;
 
     QVector<QString> stadiums = {"Arizona Diamondbacks",

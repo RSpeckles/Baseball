@@ -2,6 +2,7 @@
 #include "mainwindow.h"
 #include "parser.h"
 #include "sorter.h"
+#include "pathing.h"
 #include "ui_mainwindow.h"
 
 // librarires
@@ -32,24 +33,29 @@ MainWindow::MainWindow(QWidget *parent)
     cout <<distPath.path().toStdString();
     distPath.cdUp();
 
-    string path = distPath.path().toStdString() + "/Baseball/Distance between stadiums.csv";
+    string path = distPath.path().toStdString() + "/BaseballProject/Distance between stadiums.csv";
     cout << path << endl;
     csv_to_table(path, distTable);
+
+    QDir souvenirPath;
+    souvenirPath.cdUp();
+
+    path = souvenirPath.path().toStdString() + "/BaseballProject/Baseball Souvenirs.csv";
+    cout << path << endl;
+    csv_to_table(path, souvenirTable);
 
     QDir infoPath;
     infoPath.cdUp();
 
-    path = distPath.path().toStdString() + "/Baseball/MLB Information.csv";
+    path = distPath.path().toStdString() + "/BaseballProject/MLB Information.csv";
     cout << path << endl;
     csv_to_df(path, infoDf);
 
-    // Nico 4/30/24 idk what this is and it doesnt work so im commenting it out
-    //cout << infoDf["Arizona Diamondbacks"]["Team name"].toStdString() << endl;
-    //QVector<QString> teams = sort_by_typology(infoDf, "Major");
+    QVector<QPair<QString, double>> shortestPath = dijkstra(distTable, "Dodger Stadium", "Fenway Park");
 
-    // for (auto &it : teams){
-    //     cout << infoDf[it]["Ballpark typology"].toStdString() << endl;
-    // }
+    printPath(shortestPath);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -196,8 +202,7 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
 
             // if key is empty then ignore
             //if (key == "") { continue; }
-
-
+          
             QTableWidgetItem *data = new QTableWidgetItem(value);
             tableUI->setItem(index, headers[key], data);
             //count++;
