@@ -14,6 +14,8 @@
 #include <QListWidget>
 #include <QMessageBox>
 #include <QDebug>
+#include <QFormLayout>
+#include <QDialogButtonBox>
 
 #include <iostream>
 #include <string>
@@ -27,27 +29,31 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // commented out for now so that i can focus on ui
+    /* REMEMBER TO CHANGE "projectFileName" in mainwindow.h to your project file name.
+     * We have different working project file names for whatever reason,
+     * and this should be the easiest way to change the destination.
+    */
+
     QDir distPath;
 
     cout <<distPath.path().toStdString();
     distPath.cdUp();
 
-    string path = distPath.path().toStdString() + "/BaseballProject/Distance between stadiums.csv";
+    string path = distPath.path().toStdString() + "/" + projectFileName + "/Distance between stadiums.csv";
     cout << path << endl;
     csv_to_table(path, distTable);
 
     QDir souvenirPath;
     souvenirPath.cdUp();
 
-    path = souvenirPath.path().toStdString() + "/BaseballProject/Baseball Souvenirs.csv";
+    path = souvenirPath.path().toStdString() + "/" + projectFileName + "/Baseball Souvenirs.csv";
     cout << path << endl;
     csv_to_table(path, souvenirTable);
 
     QDir infoPath;
     infoPath.cdUp();
 
-    path = distPath.path().toStdString() + "/BaseballProject/MLB Information.csv";
+    path = distPath.path().toStdString() + "/" + projectFileName + "/MLB Information.csv";
     cout << path << endl;
     csv_to_df(path, infoDf);
 
@@ -302,6 +308,116 @@ void MainWindow::filterTeams()
 }
 
 /*
+ *  VIEW SOUVENIRS FUNCTION
+ *
+ *  Handles the "view souvenirs" button in the display page
+*/
+
+void MainWindow::viewSouvenirs() {
+    int row = this->ui->tableDisplay->currentRow();
+
+    // check if any row is selected
+    if (row < 0) {
+        QMessageBox::warning(this, "Display Teams", "Please select a team first!");
+        return;
+    }
+
+    QString team = this->ui->tableDisplay->item(row, 0)->text();
+
+    // check if souvenirs exist for team
+    if (souvenirTable.find(team) == souvenirTable.end()) {
+        QMessageBox::warning(this, "Display Teams", "No souvenirs found for " + team);
+        return;
+    }
+    QMap<QString, double> souvenirs = souvenirTable[team];
+
+    // popup
+    QDialog *endPopup = new QDialog();
+    QFormLayout *formLayout = new QFormLayout();
+    endPopup->setStyleSheet("font: 500 13pt \"Bahnschrift\"");
+    endPopup->resize(512, 512);
+
+    // connect ok and cancel boxes
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    QObject::connect(buttonBox, SIGNAL(accepted()), endPopup, SLOT(accept()));
+
+    // labels
+    QLabel *labelSouvenirs = new QLabel();
+    labelSouvenirs->setText(team + "\nSouvenirs:");
+
+    // table
+    QTableWidget *table = new QTableWidget();
+    table->setFrameShape(QAbstractScrollArea::Shape::Box);
+
+    table->setColumnCount(2);
+    table->setHorizontalHeaderLabels({"Souvenir", "Cost"});
+    table->setRowCount(souvenirs.size());
+
+    int index = 0;
+    for (auto it = souvenirs.cbegin(); it != souvenirs.cend(); ++it  )
+    {
+        QString name = it.key();
+        double cost = it.value();
+
+        QTableWidgetItem *itemUI = new QTableWidgetItem(name);
+        QTableWidgetItem *costUI = new QTableWidgetItem("$" + QString::number(cost, 'f', 2));
+
+        table->setItem(index, 0, itemUI);
+        table->setItem(index, 1, costUI);
+
+        index++;
+    }
+
+    // final
+    formLayout->addWidget(labelSouvenirs);
+    formLayout->addWidget(table);
+    formLayout->addWidget(buttonBox);
+
+    endPopup->setLayout(formLayout);
+
+    // run
+    table->setColumnWidth(0, 332);
+    table->setColumnWidth(1, 128);
+    endPopup->exec();
+}
+
+/*
+ *  SOUVENIR DISPLAY FUNCTION
+*/
+
+map<QString, QString> souvenirMap = {
+    // buttons
+    {"adminList",   "adminSouvenirList"},
+    };
+
+void MainWindow::updateSouvenirs(QString senderName) {
+    if (souvenirMap.find(senderName) != souvenirMap.end()) {
+        // get item selected
+        QString team = this->findChild<QListWidget*>(senderName)->currentItem()->text();
+
+        // find corresponding souvenir list object
+        QListWidget* souvenirList = this->findChild<QListWidget*>(souvenirMap.at(senderName));
+        souvenirList->clear();
+
+        QMap<QString, double> souvenirs = souvenirTable[team];
+
+        // add souvenirs
+        for (auto it = souvenirs.cbegin(); it != souvenirs.cend(); ++it  )
+        {
+            QString name = it.key();
+            double cost = it.value();
+
+            QString finalString = name + "\n$" + QString::number(cost, 'f', 2);
+
+            souvenirList->addItem(finalString);
+        }
+    } else {
+        // if not found, print
+        qDebug() << "Button was not found in the map.";
+    }
+}
+
+/*
  *  ADMIN STUFF
  *
  *  Admin functions
@@ -312,10 +428,12 @@ void initializeAttributes(QComboBox *comboUI, QVector<QString> teams, QMap<QStri
     comboUI->setEnabled(false);
 
     // iterate through teams
-    qDebug() << teams[1];
+    //qDebug() << teams[1];
     for (auto it = infoDf[teams[1]].cbegin(); it != infoDf[teams[1]].cend(); ++it  )
     {
         QString attribute = it.key();
+        if (attribute == "Team name") { continue; } // disables editing team names
+
         comboUI->addItem(attribute);
     }
 
@@ -336,6 +454,13 @@ QString updateValue(QString attribute, QString team, QMap<QString, QMap<QString,
 QString currentTeam = "";
 void MainWindow::adminTeamSelected()
 {
+    // get the button object and name that got pressed
+    QObject* senderObject = sender();
+    QString senderName = senderObject->objectName();
+
+    // get current selected college
+    this->updateSouvenirs(senderName);
+
     // checks
     if (!this->ui->attributeCombo->isEnabled()) { return; }
     if (this->ui->adminList->currentRow() == -1) { return; }
@@ -361,6 +486,11 @@ void MainWindow::adminTeamSelected()
     // update value
     QString currentAttribute = this->ui->attributeCombo->currentText();
     this->ui->attributeEdit->setText(updateValue(currentAttribute, currentTeam, infoDf));
+
+    // update souvenir ui
+    this->ui->buttonSouvenirAdd->setEnabled(true);
+    this->updateSouvenirs(senderName);
+    this->adminSouvenirSelected();
 }
 
 // map that uses attributes as the key to check for errors
@@ -437,7 +567,6 @@ QMap<QString, function<bool(QString&, MainWindow*, QMap<QString, QMap<QString, Q
     },
 };
 
-
 void MainWindow::adminConfirmEdit(){
     QString newValue = this->ui->attributeEdit->text();
     QString currentAttribute = this->ui->attributeCombo->currentText();
@@ -465,4 +594,140 @@ void MainWindow::adminConfirmEdit(){
 
     // update everything lol
     this->initialize();
+}
+
+// souvenir stuff for admin
+void MainWindow::adminSouvenirSelected() {
+    if (this->ui->adminSouvenirList->currentItem()) {
+        this->ui->buttonSouvenirEdit->setEnabled(true);
+        this->ui->buttonSouvenirRemove->setEnabled(true);
+    }
+    else {
+        this->ui->buttonSouvenirEdit->setEnabled(false);
+        this->ui->buttonSouvenirRemove->setEnabled(false);
+    }
+}
+
+bool stringToDouble(string inputString, double &result) {
+    char* end;
+    result = strtod(inputString.c_str(), &end);
+    if (end == inputString.c_str() || *end != '\0') return false;
+    return true;
+}
+
+
+void MainWindow::adminEditSouvenir() {
+    // get the button object and name that got pressed
+    QObject* senderObject = sender();
+    QString senderName = senderObject->objectName();
+
+    // get name of college selected
+    QString team = this->ui->adminList->currentItem()->text();
+
+    // check if souvenirs exist for team
+    if (souvenirTable.find(team) == souvenirTable.end()) {
+        QMessageBox::warning(this, "Display Teams", "No souvenirs found for " + team);
+        return;
+    }
+    // ok get souvenirs now LOL!
+    QMap<QString, double> &souvenirs = souvenirTable[team];
+
+    if (senderName == "buttonSouvenirAdd") {
+        QString name = "New Souvenir";
+        double cost = 12.34;
+
+        int count = 1;
+        while (souvenirs.find(name + " " + QString::number(count)) != souvenirs.end()) {
+            count += 1;
+        };
+        name += " " + QString::number(count);
+
+        souvenirs[name] = cost;
+    }
+    else if (senderName == "buttonSouvenirEdit") {
+        // get name of current souvenir selected
+        QString currentSouvenir = this->ui->adminSouvenirList->currentItem()->text();
+        long indexToCutOff = currentSouvenir.indexOf("\n");
+        QString name = (currentSouvenir.left(indexToCutOff));
+        double cost = souvenirs[name];
+
+        // EDIT POPUP
+        QDialog *editPopup = new QDialog();
+        QFormLayout *formLayout = new QFormLayout();
+
+        QLabel *labelName = new QLabel();
+        QLabel *labelCost = new QLabel();
+        labelName->setText("Name");
+        labelCost->setText("Cost $");
+
+        QLineEdit *editName = new QLineEdit();
+        QLineEdit *editCost = new QLineEdit();
+
+        editName->setText(name);
+        editCost->setText(QString::number(cost));
+
+        // connect ok and cancel boxes
+        QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        QObject::connect(buttonBox, SIGNAL(accepted()), editPopup, SLOT(accept()));
+        QObject::connect(buttonBox, SIGNAL(rejected()), editPopup, SLOT(reject()));
+
+        formLayout->addRow(labelName, editName);
+        formLayout->addRow(labelCost, editCost);
+        formLayout->addWidget(buttonBox);
+
+        editPopup->setLayout(formLayout);
+
+        // get result after any button is clicked
+        int result = editPopup->exec();
+        if(result == QDialog::Accepted)
+        {
+            // apply changes to souvenir
+            QString newName = editName->text();
+            QString newCost = editCost->text();
+            double cost;
+
+            // checks
+            if (!stringToDouble(newCost.toStdString(), cost)) {
+                QMessageBox::warning(this, "Souvenir Edit", "Invalid cost input!");
+                return;
+            }
+
+            if (souvenirs.find(newName) != souvenirs.end() && newName != name) {
+                QMessageBox::warning(this, "Souvenir Edit", "Souvenir already exists! Choose a different name.");
+                return;
+            }
+
+            souvenirs.remove(name);
+            souvenirs[newName] = cost;
+        }
+    }
+    else if (senderName == "buttonSouvenirRemove") {
+        // get name of current souvenir selected
+        QString currentSouvenir = this->ui->adminSouvenirList->currentItem()->text();
+        long indexToCutOff = currentSouvenir.indexOf("\n");
+        QString name = (currentSouvenir.left(indexToCutOff));
+
+        souvenirs.remove(name);
+    }
+
+    // update souvenirs on screen
+    this->updateSouvenirs("adminList");
+    this->adminSouvenirSelected();
+}
+
+// save data to csv
+void MainWindow::saveToCSV() {
+    QDir directory;
+    directory.cdUp();
+
+    // infoDF weird so dont save that yet
+    string path = directory.path().toStdString() + "/" + projectFileName + "/MLB Information.csv";
+    QString columns = "Team name,Stadium name,Seating capacity,Location,Playing surface,League,Date opened,Distance to center field,Ballpark typology,Roof Type";
+
+    df_to_csv(path, infoDf, columns);
+
+    // save souvenirs
+    path = directory.path().toStdString() + "/" + projectFileName + "/Baseball Souvenirs.csv";
+    columns = "Team name,Souvenir,Cost";
+    df_to_csv(path, souvenirTable, columns);
 }

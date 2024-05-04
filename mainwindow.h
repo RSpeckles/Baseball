@@ -26,16 +26,23 @@ public slots:
     void changePage(QString specific);
     void adminLogin();
     void filterTeams();
+    void viewSouvenirs();
+    void updateSouvenirs(QString senderName);
 
     // admin
     void adminTeamSelected();
     void adminConfirmEdit();
+    void adminSouvenirSelected();
+    void adminEditSouvenir();
+    void saveToCSV();
+
 
 private slots:
 
 private:
     Ui::MainWindow *ui;
 
+    std::string projectFileName = "Baseball";
     QMap<QString, QMap<QString, double>> distTable;
     QMap<QString, QMap<QString, double>> souvenirTable;
     QMap<QString, QMap<QString, QString>> infoDf;

@@ -130,6 +130,8 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
 //Second parameter is dataframe map you're writing from
 //Last parameter is title of rows. Write as one string, with titles separated by commas. No Spaces
 //eg. "Team name,Souvenir,Cost"
+
+// souvenirTable
 void df_to_csv(string path,
                QMap<QString, QMap<QString, double>> const dataframe,
                QString label)
@@ -177,6 +179,78 @@ void df_to_csv(string path,
 
             csv << fixed << setprecision(2) << j.value() << "\n";
         }
+    }
+}
+
+// infoDf
+void df_to_csv(string path,
+               QMap<QString, QMap<QString, QString>> const dataframe,
+               QString label)
+{
+    ofstream csv;
+    cout << path << endl;
+    csv.open(path);
+
+    if (!csv) {
+        cout << "Could not open file! :(" << endl;
+        return;
+    }
+
+    /* THIS IS UTTERLY FUCKING AUTISTIC
+     * basically to save to the MLB Information.csv correctly we have to write it as UTF-8 BOM
+     * i have no idea what this means but we need this so that it reads in correctly next time we open the app
+     * I honestly have no fucking idea how other groups will figure this out SO THANKS THIS PROJECT FUCKING SUCKS
+     * - Nico 5/3/2023 7:35pm
+    */
+    unsigned char bom[] = { 0xEF,0xBB,0xBF };
+    csv.write((char*)bom, sizeof(bom));
+
+    // add columns
+    csv << label.toStdString() << "\n";
+
+    /* split columns string so that we can find it in the dataframe rather than iterating thru each key
+     * QMaps automatically order keys alphabetically, the provided CSV isnt sorted alphabetically
+     * THIS IS THE ONLY WAY MUAHAHH!!!!!!
+    */
+    string s = label.toStdString();
+    string delimiter = ",";
+
+    size_t pos = 0;
+    string token;
+    vector<QString> keys;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos);
+        keys.push_back((QString::fromStdString(token)));
+        s.erase(0, pos + delimiter.length());
+    }
+    keys.push_back((QString::fromStdString(s)));
+
+    for (auto i = dataframe.begin(); i != dataframe.end(); i++) {
+        int index = 0;
+        for (QString key : keys) {
+            // check if it exists
+            //qDebug() << key;
+            if (i.value().find(key) == i->end()) {; continue; }
+
+            bool flag = false;
+            foreach (QChar c, i.value()[key]) {
+                if (c == ',') {
+                    flag = true;
+                }
+            }
+
+            if (flag) {
+                csv << "\"" << i.value()[key].toStdString() << "\""
+                    << ",";
+            } else {
+                csv << i.value()[key].toStdString();
+                if (keys.size()-1 > index) {
+                    csv << ",";
+                }
+            }
+            index++;
+        }
+        csv << "\n";
     }
 }
 
