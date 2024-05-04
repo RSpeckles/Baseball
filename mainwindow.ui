@@ -530,7 +530,7 @@ background-color: rgba(255, 255, 255, 0);</string>
        <rect>
         <x>10</x>
         <y>520</y>
-        <width>311</width>
+        <width>301</width>
         <height>28</height>
        </rect>
       </property>
@@ -611,6 +611,25 @@ Total Capacity: 3213</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>520</y>
+        <width>161</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>View Souvenirs</string>
       </property>
      </widget>
     </widget>
@@ -1253,18 +1272,18 @@ background-color: rgba(255, 255, 255, 0);</string>
        <string>Back</string>
       </property>
      </widget>
-     <widget class="QGroupBox" name="adminGroup">
+     <widget class="QGroupBox" name="adminTeamGroup">
       <property name="geometry">
        <rect>
         <x>10</x>
         <y>140</y>
-        <width>371</width>
-        <height>381</height>
+        <width>311</width>
+        <height>411</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <family>Bahnschrift Light</family>
+        <family>Bahnschrift</family>
         <pointsize>12</pointsize>
        </font>
       </property>
@@ -1275,41 +1294,41 @@ background-color: rgba(255, 255, 255, 0);</string>
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>340</y>
-         <width>161</width>
-         <height>28</height>
+         <y>330</y>
+         <width>291</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <family>Bahnschrift Light</family>
-         <pointsize>9</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
       </widget>
       <widget class="QLineEdit" name="attributeEdit">
        <property name="geometry">
         <rect>
-         <x>180</x>
-         <y>340</y>
-         <width>141</width>
-         <height>28</height>
+         <x>10</x>
+         <y>370</y>
+         <width>261</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
          <family>Bahnschrift Light</family>
-         <pointsize>9</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
       </widget>
       <widget class="QPushButton" name="attributeButton">
        <property name="geometry">
         <rect>
-         <x>330</x>
-         <y>340</y>
+         <x>270</x>
+         <y>370</y>
          <width>31</width>
-         <height>29</height>
+         <height>31</height>
         </rect>
        </property>
        <property name="text">
@@ -1321,9 +1340,12 @@ background-color: rgba(255, 255, 255, 0);</string>
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>351</width>
-         <height>281</height>
+         <width>291</width>
+         <height>271</height>
         </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
        </property>
       </widget>
       <widget class="QLabel" name="label">
@@ -1335,8 +1357,206 @@ background-color: rgba(255, 255, 255, 0);</string>
          <height>20</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift Light</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>Select a team to edit.</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="adminSouvenirGroup">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>140</y>
+        <width>281</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Souvenirs (Select a team first)</string>
+      </property>
+      <widget class="QListWidget" name="adminSouvenirList">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>261</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_4">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>241</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift Light</family>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Select a souvenir to edit.</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buttonSouvenirRemove">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>370</y>
+         <width>261</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Remove</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buttonSouvenirAdd">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>290</y>
+         <width>261</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Add</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="buttonSouvenirEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>330</y>
+         <width>261</width>
+         <height>29</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Edit</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupCampusEdit">
+      <property name="geometry">
+       <rect>
+        <x>618</x>
+        <y>140</y>
+        <width>171</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Add new files</string>
+      </property>
+      <widget class="QPushButton" name="buttonCampusesAdd_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>330</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>WIP</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelCampusFile_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>197</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift Light</family>
+         <pointsize>9</pointsize>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>newCampuses.csv</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="labelCampusSelected_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>130</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Bahnschrift Light</family>
+         <pointsize>12</pointsize>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>File selected:</string>
+       </property>
+      </widget>
+      <widget class="QProgressBar" name="progressBar_2">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>370</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="textVisible">
+        <bool>false</bool>
        </property>
       </widget>
      </widget>
@@ -1497,8 +1717,8 @@ background-color: rgba(255, 255, 255, 0);</string>
    <slot>filterTeams()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>600</x>
-     <y>514</y>
+     <x>312</x>
+     <y>516</y>
     </hint>
     <hint type="destinationlabel">
      <x>875</x>
@@ -1545,12 +1765,108 @@ background-color: rgba(255, 255, 255, 0);</string>
    <slot>adminConfirmEdit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>355</x>
-     <y>479</y>
+     <x>297</x>
+     <y>511</y>
     </hint>
     <hint type="destinationlabel">
      <x>-4</x>
      <y>531</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>viewSouvenirs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>512</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>844</x>
+     <y>509</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>adminSouvenirList</sender>
+   <signal>itemClicked(QListWidgetItem*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>adminSouvenirSelected()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>485</x>
+     <y>292</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-5</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSouvenirAdd</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>adminEditSouvenir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>452</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>899</x>
+     <y>450</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSouvenirEdit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>adminEditSouvenir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>546</x>
+     <y>478</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>858</x>
+     <y>470</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSouvenirRemove</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>adminEditSouvenir()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>502</x>
+     <y>495</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>954</x>
+     <y>493</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>backAdmin</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveToCSV()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>561</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-6</x>
+     <y>556</y>
     </hint>
    </hints>
   </connection>
@@ -1561,5 +1877,10 @@ background-color: rgba(255, 255, 255, 0);</string>
   <slot>filterTeams()</slot>
   <slot>adminTeamSelected()</slot>
   <slot>adminConfirmEdit()</slot>
+  <slot>viewSouvenirs()</slot>
+  <slot>updateSouvenirs()</slot>
+  <slot>adminSouvenirSelected()</slot>
+  <slot>adminEditSouvenir()</slot>
+  <slot>saveToCSV()</slot>
  </slots>
 </ui>
