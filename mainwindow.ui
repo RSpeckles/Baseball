@@ -23,6 +23,12 @@
       <height>621</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Bahnschrift</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
     </property>
@@ -667,8 +673,7 @@ Total Capacity: 3213</string>
        <number>1</number>
       </property>
       <property name="text">
-       <string>Select stadiums to plan a trip, calculating the most efficient path for you. 
-Once you start the virtual trip, you can visit each and buy their souvenirs.</string>
+       <string>WIP: The end destination will always be Fenway Park for debugging reasons. Still figuring out how the pathing algorithm will work.</string>
       </property>
       <property name="scaledContents">
        <bool>false</bool>
@@ -805,8 +810,124 @@ background-color: rgba(255, 255, 255, 0);</string>
        </item>
       </layout>
      </widget>
+     <widget class="QGroupBox" name="groupPlanColleges">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>381</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Select Stadiums</string>
+      </property>
+      <layout class="QFormLayout" name="formLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelStartingStadium">
+         <property name="font">
+          <font>
+           <family>Bahnschrift Light</family>
+           <pointsize>12</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Starting Stadium</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QComboBox" name="comboPlanStadiums"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="labelDestinations">
+         <property name="font">
+          <font>
+           <family>Bahnschrift Light</family>
+           <pointsize>12</pointsize>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Destinations</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QListWidget" name="listPlanStadiums">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2">
+        <widget class="QPushButton" name="buttonPlanTrip">
+         <property name="text">
+          <string>Plan trip</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="groupCollegePath">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>220</y>
+        <width>381</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="title">
+       <string>Most Efficient Path Result</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="1">
+        <widget class="QListWidget" name="listPathResult">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="buttonStartTrip">
+         <property name="text">
+          <string>Start Virtual Trip</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="labelTotalDistance">
+         <property name="text">
+          <string>Total Distance:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
-    <widget class="QWidget" name="virtualTrip">
+    <widget class="QWidget" name="virtualtrip">
      <widget class="QFrame" name="headerVirtualTrip">
       <property name="enabled">
        <bool>true</bool>
@@ -927,6 +1048,86 @@ background-color: rgba(255, 255, 255, 0);</string>
       <property name="text">
        <string>Next Stop</string>
       </property>
+     </widget>
+     <widget class="QGroupBox" name="groupSouvenirs">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>210</y>
+        <width>781</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Souvenirs</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelSouvenirPurchase">
+         <property name="text">
+          <string>Purchase any souvenir you wish.</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelPurchaseTotal">
+         <property name="text">
+          <string>Total Spent: $0.00</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QTableWidget" name="tableSouvenir">
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="sizeAdjustPolicy">
+          <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QPushButton" name="buttonPurchase">
+         <property name="text">
+          <string>Purchase</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="groupDestination">
+      <property name="geometry">
+       <rect>
+        <x>9</x>
+        <y>140</y>
+        <width>781</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Destination 0</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelDestination">
+         <property name="text">
+          <string>Stadium Name</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="adminlogin">
@@ -1277,7 +1478,7 @@ background-color: rgba(255, 255, 255, 0);</string>
        <rect>
         <x>10</x>
         <y>140</y>
-        <width>311</width>
+        <width>281</width>
         <height>411</height>
        </rect>
       </property>
@@ -1295,7 +1496,7 @@ background-color: rgba(255, 255, 255, 0);</string>
         <rect>
          <x>10</x>
          <y>330</y>
-         <width>291</width>
+         <width>261</width>
          <height>31</height>
         </rect>
        </property>
@@ -1311,7 +1512,7 @@ background-color: rgba(255, 255, 255, 0);</string>
         <rect>
          <x>10</x>
          <y>370</y>
-         <width>261</width>
+         <width>231</width>
          <height>31</height>
         </rect>
        </property>
@@ -1325,7 +1526,7 @@ background-color: rgba(255, 255, 255, 0);</string>
       <widget class="QPushButton" name="attributeButton">
        <property name="geometry">
         <rect>
-         <x>270</x>
+         <x>240</x>
          <y>370</y>
          <width>31</width>
          <height>31</height>
@@ -1340,7 +1541,7 @@ background-color: rgba(255, 255, 255, 0);</string>
         <rect>
          <x>10</x>
          <y>50</y>
-         <width>291</width>
+         <width>261</width>
          <height>271</height>
         </rect>
        </property>
@@ -1371,7 +1572,7 @@ background-color: rgba(255, 255, 255, 0);</string>
      <widget class="QGroupBox" name="adminSouvenirGroup">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>300</x>
         <y>140</y>
         <width>281</width>
         <height>411</height>
@@ -1470,9 +1671,9 @@ background-color: rgba(255, 255, 255, 0);</string>
      <widget class="QGroupBox" name="groupCampusEdit">
       <property name="geometry">
        <rect>
-        <x>618</x>
+        <x>588</x>
         <y>140</y>
-        <width>171</width>
+        <width>201</width>
         <height>411</height>
        </rect>
       </property>
@@ -1486,7 +1687,7 @@ background-color: rgba(255, 255, 255, 0);</string>
       <property name="title">
        <string>Add new files</string>
       </property>
-      <widget class="QPushButton" name="buttonCampusesAdd_2">
+      <widget class="QPushButton" name="buttonCampusesAdd">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -1494,21 +1695,21 @@ background-color: rgba(255, 255, 255, 0);</string>
         <rect>
          <x>10</x>
          <y>330</y>
-         <width>151</width>
+         <width>181</width>
          <height>31</height>
         </rect>
        </property>
        <property name="text">
-        <string>WIP</string>
+        <string>Load files</string>
        </property>
       </widget>
-      <widget class="QLabel" name="labelCampusFile_2">
+      <widget class="QLabel" name="labelCampusFile">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>50</y>
          <width>197</width>
-         <height>20</height>
+         <height>81</height>
         </rect>
        </property>
        <property name="font">
@@ -1520,10 +1721,13 @@ background-color: rgba(255, 255, 255, 0);</string>
         </font>
        </property>
        <property name="text">
-        <string>newCampuses.csv</string>
+        <string>MLB Information
+Expansion.csv,
+Distance between
+expansion stadium.csv</string>
        </property>
       </widget>
-      <widget class="QLabel" name="labelCampusSelected_2">
+      <widget class="QLabel" name="labelCampusSelected">
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -1540,15 +1744,15 @@ background-color: rgba(255, 255, 255, 0);</string>
         </font>
        </property>
        <property name="text">
-        <string>File selected:</string>
+        <string>Files selected:</string>
        </property>
       </widget>
-      <widget class="QProgressBar" name="progressBar_2">
+      <widget class="QProgressBar" name="progressBar">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>370</y>
-         <width>151</width>
+         <width>181</width>
          <height>31</height>
         </rect>
        </property>
@@ -1765,8 +1969,8 @@ background-color: rgba(255, 255, 255, 0);</string>
    <slot>adminConfirmEdit()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>297</x>
-     <y>511</y>
+     <x>269</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>-4</x>
@@ -1813,8 +2017,8 @@ background-color: rgba(255, 255, 255, 0);</string>
    <slot>adminEditSouvenir()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>452</x>
-     <y>446</y>
+     <x>424</x>
+     <y>440</y>
     </hint>
     <hint type="destinationlabel">
      <x>899</x>
@@ -1870,6 +2074,102 @@ background-color: rgba(255, 255, 255, 0);</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonCampusesAdd</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>loadFromCSV()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>729</x>
+     <y>468</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>802</x>
+     <y>464</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboPlanStadiums</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>getDestinations()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>276</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-2</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonPlanTrip</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>planTrip()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>492</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-4</x>
+     <y>502</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonStartTrip</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>startTrip()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>748</x>
+     <y>494</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>806</x>
+     <y>500</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonNextStop</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>nextStop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>544</x>
+     <y>562</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>807</x>
+     <y>551</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonPurchase</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>purchase()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>728</x>
+     <y>495</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>893</x>
+     <y>648</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changePage()</slot>
@@ -1882,5 +2182,11 @@ background-color: rgba(255, 255, 255, 0);</string>
   <slot>adminSouvenirSelected()</slot>
   <slot>adminEditSouvenir()</slot>
   <slot>saveToCSV()</slot>
+  <slot>loadFromCSV()</slot>
+  <slot>getDestinations()</slot>
+  <slot>planTrip()</slot>
+  <slot>startTrip()</slot>
+  <slot>nextStop()</slot>
+  <slot>purchase()</slot>
  </slots>
 </ui>

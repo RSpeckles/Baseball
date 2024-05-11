@@ -18,10 +18,17 @@ public:
     ~MainWindow();
 
 public slots:
-    // initializers
+    /*
+     * INITIALIZERS
+    */
+
     void initialize();
 
-    // connections
+    /*
+     * CONNECTIONS
+    */
+
+    // general
     void changePage();
     void changePage(QString specific);
     void adminLogin();
@@ -35,6 +42,17 @@ public slots:
     void adminSouvenirSelected();
     void adminEditSouvenir();
     void saveToCSV();
+    void loadFromCSV();
+
+    // planning
+    void initializeStadiumPlan();
+    void getDestinations();
+    void planTrip();
+    void startTrip();
+    void setCurrentDestination(int index);
+    void nextStop();
+    void purchase();
+    void endTripScreen(QVector<QPair<QString, double>> &totalSouvenirs);
 
 
 private slots:
