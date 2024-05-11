@@ -673,8 +673,7 @@ Total Capacity: 3213</string>
        <number>1</number>
       </property>
       <property name="text">
-       <string>Select stadiums to plan a trip, calculating the most efficient path for you. 
-Once you start the virtual trip, you can visit each and buy their souvenirs.</string>
+       <string>WIP: The end destination will always be Fenway Park for debugging reasons. Still figuring out how the pathing algorithm will work.</string>
       </property>
       <property name="scaledContents">
        <bool>false</bool>
@@ -875,7 +874,7 @@ background-color: rgba(255, 255, 255, 0);</string>
        <item row="7" column="0" colspan="2">
         <widget class="QPushButton" name="buttonPlanTrip">
          <property name="text">
-          <string>Plan Trip</string>
+          <string>Plan trip</string>
          </property>
         </widget>
        </item>
