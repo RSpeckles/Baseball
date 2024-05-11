@@ -53,7 +53,7 @@ QVector<QPair<QString, double>> dijkstra(QMap<QString, QMap<QString, double>>& d
     path.push_back({start, 0});
     std::reverse(path.begin(), path.end());
 
-    return path;
+    return path;x
 }
 
 // to print the shortest path
