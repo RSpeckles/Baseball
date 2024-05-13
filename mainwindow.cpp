@@ -848,13 +848,42 @@ int currentIndex = 0;
 void MainWindow::planTrip() {
     // get name of stadium selected
     string currentText = this->ui->comboPlanStadiums->currentText().toStdString();
-
     size_t endPos = currentText.find('(');
     QString currentStadium = QString::fromStdString(currentText.substr(0, endPos - 1));
 
+    // get destinations
+    QVector<QString> destinations;
+    int closestNum = this->ui->spinClosest->value();
+
     // get path
+    if (closestNum < 1) {
+        // add other destinations
+        for(int i = 0; i < this->ui->listPlanStadiums->count(); i++)
+        {
+            // get name
+            QListWidgetItem *item = this->ui->listPlanStadiums->item(i);
+
+            // check if checked
+            if (item->checkState() == Qt::Unchecked) { continue; };
+            currentText = item->text().toStdString();
+            endPos = currentText.find('(');
+            QString stadiumName = QString::fromStdString(currentText.substr(0, endPos - 1));
+
+            // add to list
+            destinations.push_back(stadiumName);
+        }
+    }
+    else {
+    // if closest lol
+        currentPath = visitNumClosest(distTable, currentStadium, closestNum);
+    }
+
+    //qDebug() << destinations;
+
+
+
     // THIS IS WIP. INSTEAD OF CHOOSING ONE DESTINATION, WE NEED TO CHOOSE MULTIPLE WHICH IS NOT IMPLEMENTED
-    currentPath = dijkstra(distTable, currentStadium, "Fenway Park");
+    //currentPath = dijkstra(distTable, currentStadium, "Fenway Park");
 
     // ui stuff
     this->ui->listPathResult->clear();
@@ -884,7 +913,7 @@ void MainWindow::planTrip() {
             }
         }
 
-        if (!foundTeam) { qDebug() << "Couldn't find team to set destination to!"; return; }
+        //if (!foundTeam) { qDebug() << "Couldn't find team to set destination to!"; return; }
 
         QString pathString;
         pathString.append(destination.first + " (" + team["Team name"] + ")");

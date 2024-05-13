@@ -1,3 +1,4 @@
+#include "qdebug.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -62,6 +63,40 @@ void printPath(const QVector<QPair<QString, double>>& path) {
     for (const auto& stadium : path) {
         std::cout << stadium.first.toStdString() << " - Distance: " << stadium.second << " miles\n";
     }
+}
+
+QVector<QPair<QString, double>> visitNumClosest(QMap<QString, QMap<QString, double>>& distTable, QString start, int numToVisit) {
+    QVector<QPair<QString, double>> path;
+    QString currDestination = start;
+    path.push_back({start, 0});
+
+    for (int i = 0; i < numToVisit; i++) {
+        qDebug() << currDestination;
+        QMap<QString, double> currDistances = distTable[currDestination];
+        QPair<QString, double> shortest = {"", 999999999999999};
+
+        for (auto it = currDistances.cbegin(); it != currDistances.cend(); ++it  )
+        {
+            QString name = it.key();
+            double dist = it.value();
+
+            // check if already exists in path
+            bool alreadyInPath = false;
+            for (QPair<QString, double> stadiums : path) {
+                if (stadiums.first == name) { alreadyInPath = true; }
+            }
+            if (alreadyInPath == true) { continue; }
+
+            if (dist < shortest.second) {
+                shortest = {name, dist};
+            }
+        }
+
+        path.push_back(shortest);
+        currDestination = shortest.first;
+    }
+
+    return path;
 }
 
 // int main() {
