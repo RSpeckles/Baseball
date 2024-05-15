@@ -54,6 +54,11 @@ public slots:
     void purchase();
     void endTripScreen(QVector<QPair<QString, double>> &totalSouvenirs);
 
+    // algorithm
+    void intializeAlgorithm();
+    void algorithmChanged();
+    void runAlgorithm();
+
 
 private slots:
 
