@@ -196,3 +196,14 @@ QVector<QPair<QString, double>> findClosestStadiums(const unordered_map<string, 
 
     return path;
 }
+
+QVector<QPair<QString, double>> closestInOrder(unordered_map<string, unordered_map<string, int>> &graph, QVector<QString> order){
+    QVector<string> visitedStadiums = {order[0].toStdString()};
+    QVector<QPair<QString, double>> path;
+    for (int i = 0; i < order.size(); i++){
+        unordered_map<string, int> distances = dijkstra(graph, order[i].toStdString());
+        path.push_back({order[i+1], distances[order[i+1].toStdString()]});
+    }
+
+    return path;
+}
