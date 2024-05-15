@@ -991,7 +991,7 @@ Total Capacity: 3213</string>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
-        <x>320</x>
+        <x>430</x>
         <y>520</y>
         <width>121</width>
         <height>29</height>
@@ -1007,10 +1007,10 @@ Total Capacity: 3213</string>
        <string>View Souvenirs</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushViewInfo">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>320</x>
         <y>520</y>
         <width>101</width>
         <height>29</height>
@@ -1232,6 +1232,9 @@ background-color: rgba(255, 255, 255, 0);</string>
          </property>
         </widget>
        </item>
+       <item row="1" column="0" colspan="2">
+        <widget class="QComboBox" name="comboPlanStadiums"/>
+       </item>
        <item row="4" column="0">
         <widget class="QLabel" name="labelDestinations">
          <property name="font">
@@ -1256,30 +1259,24 @@ background-color: rgba(255, 255, 255, 0);</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
+       <item row="11" column="0" colspan="2">
         <widget class="QPushButton" name="buttonPlanTrip">
          <property name="text">
           <string>Plan trip</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QComboBox" name="comboPlanStadiums"/>
+       <item row="7" column="0">
+        <widget class="QCheckBox" name="orderSpecified">
+         <property name="text">
+          <string>Order specified</string>
+         </property>
+        </widget>
        </item>
        <item row="7" column="1">
-        <widget class="QSpinBox" name="spinClosest"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="labelStartingCollege_2">
-         <property name="font">
-          <font>
-           <family>Bahnschrift Light</family>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-          </font>
-         </property>
+        <widget class="QPushButton" name="addToOrder">
          <property name="text">
-          <string>Visit Closest</string>
+          <string>Add to order</string>
          </property>
         </widget>
        </item>
@@ -2390,8 +2387,8 @@ expansion stadium.csv</string>
    <slot>viewSouvenirs()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>399</x>
-     <y>512</y>
+     <x>511</x>
+     <y>514</y>
     </hint>
     <hint type="destinationlabel">
      <x>844</x>
@@ -2614,8 +2611,8 @@ expansion stadium.csv</string>
    <slot>algorithmChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>284</y>
+     <x>66</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>42</x>
@@ -2630,8 +2627,8 @@ expansion stadium.csv</string>
    <slot>runAlgorithm()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>202</x>
-     <y>489</y>
+     <x>204</x>
+     <y>380</y>
     </hint>
     <hint type="destinationlabel">
      <x>212</x>
@@ -2640,18 +2637,34 @@ expansion stadium.csv</string>
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>pushViewInfo</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
    <slot>viewInfo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>521</x>
+     <x>346</x>
      <y>510</y>
     </hint>
     <hint type="destinationlabel">
-     <x>881</x>
-     <y>379</y>
+     <x>334</x>
+     <y>687</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addToOrder</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addToOrder()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>308</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>478</x>
+     <y>701</y>
     </hint>
    </hints>
   </connection>
@@ -2676,5 +2689,6 @@ expansion stadium.csv</string>
   <slot>algorithmChanged()</slot>
   <slot>runAlgorithm()</slot>
   <slot>viewInfo()</slot>
+  <slot>addToOrder()</slot>
  </slots>
 </ui>

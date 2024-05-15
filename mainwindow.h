@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -77,6 +78,7 @@ public slots:
      * @param senderName The name of the sender.
      */
     void updateSouvenirs(QString senderName);
+    void viewInfo();
 
     // admin
 
@@ -120,6 +122,8 @@ public slots:
     /**
      * @brief Gets destinations.
      */
+
+    void addToOrder();
     void getDestinations();
 
     /**

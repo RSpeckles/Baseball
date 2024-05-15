@@ -1,4 +1,4 @@
-// files
+
 #include "mainwindow.h"
 #include "parser.h"
 #include "sorter.h"
@@ -1029,6 +1029,29 @@ void MainWindow::initializeStadiumPlan() {
 * stadium, and populates the destination list with all other stadiums, excluding the selected
 * one. Each destination is displayed as a checkable item in the list.
 */
+
+QVector<QString> orderSpecified;
+
+void MainWindow::addToOrder() {
+    for(int i = 0; i < this->ui->listPlanStadiums->count(); i++)
+    {
+        // get name
+        QListWidgetItem *item = this->ui->listPlanStadiums->item(i);
+
+        // check if checked
+        if (item->checkState() == Qt::Checked) {
+            string currentText = item->text().toStdString();
+            int endPos = currentText.find('(');
+            string stadiumName = currentText.substr(0, endPos - 1);
+
+            // add to list
+            orderSpecified.push_back(QString::fromStdString(stadiumName));
+            qDebug() << orderSpecified;
+            return;
+        };
+    }
+}
+
 void MainWindow::getDestinations() {
     // get name of college selected
     string currentText = this->ui->comboPlanStadiums->currentText().toStdString();
@@ -1053,7 +1076,10 @@ void MainWindow::getDestinations() {
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable); // set checkable flag
         item->setCheckState(Qt::Unchecked); // AND initialize check state
         item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
+
     }
+
+    orderSpecified.clear();
 }
 
 // current path
@@ -1069,6 +1095,7 @@ int currentIndex = 0;
 * individual destinations or using the "closest" option), calculates the path using a graph
 * algorithm, and displays the path with the total distance in the user interface.
 */
+
 void MainWindow::planTrip() {
     // get name of stadium selected
     string currentText = this->ui->comboPlanStadiums->currentText().toStdString();
@@ -1076,11 +1103,12 @@ void MainWindow::planTrip() {
     QString currentStadium = QString::fromStdString(currentText.substr(0, endPos - 1));
 
     // get destinations
-    QVector<string> destinations;
-    int closestNum = this->ui->spinClosest->value();
+    vector<string> destinations;
+    //int closestNum = this->ui->spinClosest->value();
+    bool isOrderSpecified = this->ui->orderSpecified->isChecked();
 
     // get path
-    if (closestNum < 1) {
+    if (!isOrderSpecified) {
         // add other destinations
         for(int i = 0; i < this->ui->listPlanStadiums->count(); i++)
         {
@@ -1129,7 +1157,7 @@ void MainWindow::planTrip() {
     }
     else {
         // if closest lol
-        currentPath = shortest_path_to_all_stadiums(distTable, currentStadium);
+        //currentPath = visitNumClosest(distTable, currentStadium, closestNum);
     }
 
     // check
@@ -1505,4 +1533,3 @@ void MainWindow::runAlgorithm() {
 
     this->ui->labelMileage->setText(finalText);
     this->ui->labelAlgSelected->setText(poopText);
-}
