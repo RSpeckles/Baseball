@@ -1,0 +1,18 @@
+@startuml
+actor User
+participant "MainWindow" as MW
+participant "Database" as DB
+User -> MW : navigate to "Virtual Tour"
+MW -> DB : fetch list of stadiums
+DB --> MW : return list of stadiums
+MW -> User : display list of stadiums
+User -> MW : select a stadium
+MW -> DB : fetch virtual tour data
+DB --> MW : return virtual tour data
+MW -> User : display virtual tour interface
+User -> MW : interact with virtual tour
+User -> MW : view souvenirs
+User -> MW : add souvenirs to cart
+User -> MW : finish tour
+MW -> User : display options (plan trip, return home)
+@enduml
