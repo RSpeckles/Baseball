@@ -993,7 +993,7 @@ Total Capacity: 3213</string>
        <rect>
         <x>320</x>
         <y>520</y>
-        <width>161</width>
+        <width>121</width>
         <height>29</height>
        </rect>
       </property>
@@ -1005,6 +1005,25 @@ Total Capacity: 3213</string>
       </property>
       <property name="text">
        <string>View Souvenirs</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>520</y>
+        <width>101</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>View Info</string>
       </property>
      </widget>
     </widget>
@@ -2620,6 +2639,22 @@ expansion stadium.csv</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>viewInfo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>521</x>
+     <y>510</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>881</x>
+     <y>379</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>changePage()</slot>
@@ -2640,5 +2675,6 @@ expansion stadium.csv</string>
   <slot>purchase()</slot>
   <slot>algorithmChanged()</slot>
   <slot>runAlgorithm()</slot>
+  <slot>viewInfo()</slot>
  </slots>
 </ui>

@@ -70,6 +70,8 @@ public slots:
      */
     void viewSouvenirs();
 
+    void viewInfo();
+
     /**
      * @brief Updates souvenirs.
      * @param senderName The name of the sender.
