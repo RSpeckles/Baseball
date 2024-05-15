@@ -1,0 +1,19 @@
+@startuml
+actor Admin
+participant "MainWindow" as MW
+participant "Database" as DB
+Admin -> MW : navigate to "Edit Souvenirs"
+MW -> DB : fetch list of stadiums
+DB --> MW : return list of stadiums
+MW -> Admin : display list of stadiums
+Admin -> MW : select a stadium
+MW -> DB : fetch list of souvenirs
+DB --> MW : return list of souvenirs
+MW -> Admin : display list of souvenirs
+Admin -> MW : select a souvenir to edit
+MW -> Admin : display souvenir details
+Admin -> MW : edit details and confirm changes
+MW -> DB : update souvenir details
+DB --> MW : confirm update
+MW -> Admin : display success message
+@enduml
