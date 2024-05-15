@@ -10,61 +10,13 @@
 #include <QString>
 #include <QMap>
 
+using namespace std;
+
 // DOP DOP DOP
 const QString START_STADIUM = "Dodger Stadium";
 const QString END_STADIUM = "Fenway Park";
 
-// Dijistra skibidi
-QVector<QPair<QString, double>> dijkstra(QMap<QString, QMap<QString, double>>& distTable, QString start, QString end) {
-    QMap<QString, double> distance;
-    QMap<QString, QString> previous;
-    std::priority_queue<QPair<double, QString>> pq;
-
-    for (auto it = distTable.begin(); it != distTable.end(); ++it) {
-        distance[it.key()] = std::numeric_limits<double>::max();
-    }
-    distance[start] = 0;
-
-    pq.push({0, start});
-
-    while (!pq.empty()) {
-        QString current = pq.top().second;
-        pq.pop();
-
-        if (current == end) {
-            break;
-        }
-
-        for (auto it = distTable[current].begin(); it != distTable[current].end(); ++it) {
-            double newDist = distance[current] + *it;
-            if (newDist < distance[it.key()]) {
-                distance[it.key()] = newDist;
-                previous[it.key()] = current;
-                pq.push({newDist, it.key()});
-            }
-        }
-    }
-
-    QVector<QPair<QString, double>> path;
-    QString current = end;
-    while (previous.find(current) != previous.end()) {
-        path.push_back({current, distance[current]});
-        current = previous[current];
-    }
-    path.push_back({start, 0});
-    std::reverse(path.begin(), path.end());
-
-    return path;
-}
-
-// to print the shortest path
-void printPath(const QVector<QPair<QString, double>>& path) {
-    std::cout << "Shortest path from " << START_STADIUM.toStdString() << " to " << END_STADIUM.toStdString() << ":\n";
-    for (const auto& stadium : path) {
-        std::cout << stadium.first.toStdString() << " - Distance: " << stadium.second << " miles\n";
-    }
-}
-
+// this is for when we only need to visit the closest stadiums given only the number and starting stadium
 QVector<QPair<QString, double>> visitNumClosest(QMap<QString, QMap<QString, double>>& distTable, QString start, int numToVisit) {
     QVector<QPair<QString, double>> path;
     QString currDestination = start;
@@ -99,11 +51,89 @@ QVector<QPair<QString, double>> visitNumClosest(QMap<QString, QMap<QString, doub
     return path;
 }
 
-// int main() {
-//     const QString FILENAME = "/Users/dimitri.chrysafis/CLionProjects/Dijij/Distance between stadiums.csv";
-//     QMap<QString, QMap<QString, double>> distTable;
-//     csv_to_table(FILENAME, distTable);
-//     QVector<QPair<QString, double>> shortestPath = dijkstra(distTable, START_STADIUM, END_STADIUM);
-//     printPath(shortestPath);
-//     return 0;
-// }
+// read stadium distances
+unordered_map<string, unordered_map<string, int>> readStadiumDistances(const string& filename) {
+    ifstream file(filename);
+    unordered_map<string, unordered_map<string, int>> graph;
+
+    if (!file.is_open()) {
+        cerr << "Error: Unable to open file " << filename << endl;
+        exit(1);
+    }
+
+    string line;
+    getline(file, line);
+
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string origin, destination, distance_str;
+        getline(ss, origin, ',');
+        getline(ss, destination, ',');
+        getline(ss, distance_str, ',');
+        int distance = stoi(distance_str);
+
+        graph[origin][destination] = distance;
+        graph[destination][origin] = distance;
+    }
+
+    file.close();
+    return graph;
+}
+
+// stole this shit lmao
+unordered_map<string, int> dijkstra(const unordered_map<string, unordered_map<string, int>>& graph, const string& start) {
+    unordered_map<string, int> distances;
+    priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
+
+    for (const auto& entry : graph) {
+        distances[entry.first] = INT_MAX;
+    }
+    distances[start] = 0;
+    pq.push({0, start});
+
+    while (!pq.empty()) {
+        auto [current_distance, current_node] = pq.top();
+        pq.pop();
+
+        if (current_distance > distances[current_node]) {
+            continue;
+        }
+
+        for (const auto& neighbor : graph.at(current_node)) {
+            int distance = current_distance + neighbor.second;
+            if (distance < distances[neighbor.first]) {
+                distances[neighbor.first] = distance;
+                pq.push({distance, neighbor.first});
+            }
+        }
+    }
+
+    return distances;
+}
+
+// FUCK THIS SHIT https://www.youtube.com/watch?v=DRDvrqjTR7s&list=LL&index=1
+// i listedned to that osng in loop this entire time
+QVector<QPair<QString, double>> findClosestStadiums(const unordered_map<string, int>& distances, const vector<string>& stadiums, int num_closest) {
+    vector<pair<string, int>> sorted_distances(distances.begin(), distances.end());
+    sort(sorted_distances.begin(), sorted_distances.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+        return a.second < b.second;
+    });
+
+    QVector<QPair<QString, double>> path;
+
+    cout << "Closest " << num_closest << " stadiums:" << endl;
+    int count = 0;
+    for (const auto& [stadium, distance] : sorted_distances) {
+        if (count >= num_closest) {
+            break;
+        }
+        if (find(stadiums.begin(), stadiums.end(), stadium) != stadiums.end()) {
+            path.push_back({QString::fromStdString(stadium), distance});
+
+            //cout << "Stadium: " << stadium << ", Distance: " << distance << endl;
+            count++;
+        }
+    }
+
+    return path;
+}

@@ -13,6 +13,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    algorithms.h \
     mainwindow.h \
     parser.h \
     pathing.h \

@@ -4,6 +4,7 @@
 #include "sorter.h"
 #include "pathing.h"
 #include "ui_mainwindow.h"
+#include "algorithms.h"
 
 // librarires
 #include <QDir>
@@ -42,21 +43,21 @@ MainWindow::MainWindow(QWidget *parent)
     distPath.cdUp();
 
     string path = distPath.path().toStdString() + "/" + projectFileName + "/Distance between stadiums.csv";
-    cout << path << endl;
+    //cout << path << endl;
     csv_to_table(path, distTable);
 
     QDir souvenirPath;
     souvenirPath.cdUp();
 
     path = souvenirPath.path().toStdString() + "/" + projectFileName + "/Baseball Souvenirs.csv";
-    cout << path << endl;
+    //cout << path << endl;
     csv_to_table(path, souvenirTable);
 
     QDir infoPath;
     infoPath.cdUp();
 
     path = distPath.path().toStdString() + "/" + projectFileName + "/MLB Information.csv";
-    cout << path << endl;
+    //cout << path << endl;
     csv_to_df(path, infoDf);
 
     //QVector<QPair<QString, double>> shortestPath = dijkstra(distTable, "Dodger Stadium", "Fenway Park");
@@ -88,6 +89,7 @@ map<QString, QString> buttonMap = {
     {"buttonPlan", "plan"},
     {"buttonAdmin", "adminlogin"},
     {"buttonStartTrip", "virtualtrip"},
+    {"buttonAlgorithm", "algorithm"},
 
     // back buttons
     {"backDisplay", "home"},
@@ -95,6 +97,7 @@ map<QString, QString> buttonMap = {
     {"backAdmin", "home"},
     {"backLogin", "home"},
     {"backVirtualTrip", "plan"},
+    {"backAlgorithm", "home"},
 
     // special condition
     // allows us to pass an argument into the function, which dictates which page it wants to go to.
@@ -297,6 +300,7 @@ void MainWindow::initialize() {
     initializeAttributes(this->ui->attributeCombo, stadiums, infoDf);
     initializePurchase(this->ui->tableSouvenir);
     this->initializeStadiumPlan();
+    this->intializeAlgorithm();
 }
 
 /*
@@ -852,7 +856,7 @@ void MainWindow::planTrip() {
     QString currentStadium = QString::fromStdString(currentText.substr(0, endPos - 1));
 
     // get destinations
-    QVector<QString> destinations;
+    vector<string> destinations;
     int closestNum = this->ui->spinClosest->value();
 
     // get path
@@ -867,33 +871,40 @@ void MainWindow::planTrip() {
             if (item->checkState() == Qt::Unchecked) { continue; };
             currentText = item->text().toStdString();
             endPos = currentText.find('(');
-            QString stadiumName = QString::fromStdString(currentText.substr(0, endPos - 1));
+            string stadiumName = currentText.substr(0, endPos - 1);
 
             // add to list
             destinations.push_back(stadiumName);
         }
+
+        // ok finally its implemented
+        QDir distPath;
+        distPath.cdUp();
+        string path = distPath.path().toStdString() + "/" + projectFileName + "/Distance between stadiums.csv";
+        unordered_map<string, unordered_map<string, int>> graph = readStadiumDistances(path);
+
+        string start_stadium = currentStadium.toStdString();
+        int num_closest_stadiums = destinations.size();
+
+        unordered_map<string, int> distances = dijkstra(graph, start_stadium);
+        currentPath = findClosestStadiums(distances, destinations, num_closest_stadiums);
+        currentPath.push_front({currentStadium, 0});
+
     }
     else {
     // if closest lol
         currentPath = visitNumClosest(distTable, currentStadium, closestNum);
     }
 
-    //qDebug() << destinations;
-
-
-
-    // THIS IS WIP. INSTEAD OF CHOOSING ONE DESTINATION, WE NEED TO CHOOSE MULTIPLE WHICH IS NOT IMPLEMENTED
-    //currentPath = dijkstra(distTable, currentStadium, "Fenway Park");
+    // check
+    if (currentPath.size() < 2) {
+        QMessageBox::warning(this, "Plan Visit", "There must be at least one destination!");
+        return;
+    }
 
     // ui stuff
     this->ui->listPathResult->clear();
     this->ui->buttonStartTrip->setEnabled(true);
-
-    for (const auto& stadium : currentPath) {
-
-
-        std::cout << stadium.first.toStdString() << " - Distance: " << stadium.second << " miles\n";
-    }
 
     double totalDist = 0;
     for (int i = 0; i < static_cast<int>(currentPath.size()); i++) {
@@ -913,7 +924,7 @@ void MainWindow::planTrip() {
             }
         }
 
-        //if (!foundTeam) { qDebug() << "Couldn't find team to set destination to!"; return; }
+        if (!foundTeam) { qDebug() << "Couldn't find team to set destination to!"; return; }
 
         QString pathString;
         pathString.append(destination.first + " (" + team["Team name"] + ")");
@@ -1123,4 +1134,88 @@ void MainWindow::endTripScreen(QVector<QPair<QString, double>> &totalSouvenirs) 
 
     // run
     endPopup->exec();
+}
+
+/*
+ * Algorithm stuff
+*/
+
+/*
+ * PLAN TRIP STUFF
+ */
+
+void MainWindow::intializeAlgorithm() {
+    this->ui->comboStadium->clear();
+
+    // add stadiums to dropdown
+    for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+    {
+        QString team = it.key();
+        QString stadium = it.value()["Stadium name"];
+
+        this->ui->comboStadium->addItem(stadium + " (" + team + ")");
+    }
+
+    this->algorithmChanged();
+}
+
+void MainWindow::algorithmChanged() {
+    QString currentAlg = this->ui->comboAlgorithm->currentText();
+
+    this->ui->comboStadium->setEnabled((currentAlg == "BFS" || currentAlg == "DFS"));
+}
+
+QMap<QString, QString> algorithmStrings = {
+    {"MST", "Minimum Spanning Tree (Prim's)"},
+    {"BFS", "Breadth First Search"},
+    {"DFS", "Depth First Search"},
+};
+
+void MainWindow::runAlgorithm() {
+    // load file
+    QDir distPath;
+    distPath.cdUp();
+
+    string path = distPath.path().toStdString() + "/" + projectFileName + "/Distance between stadiums.csv";
+    QMap<QString, StadiumQ> graph = parseCSV(QString::fromStdString(path));
+    unordered_map<string, vector<pair<string, int>>> graph2 = parseCSV2(QString::fromStdString(path));
+
+    // get curr algorithm
+    QString currentAlg = this->ui->comboAlgorithm->currentText();
+
+    // get curr stadium
+    string currentStadium = this->ui->comboStadium->currentText().toStdString();
+    auto endPos = currentStadium.find('(');
+    QString stadiumName = QString::fromStdString(currentStadium.substr(0, endPos - 1));
+
+    // declare total dist
+    int totalDistance = 0;
+
+    // idk what this is but it was given to me
+    QMap<QString, bool> visited;
+    for (const auto& key : graph.keys()) {
+        visited[key] = false;
+    }
+
+    if (currentAlg == "MST") {
+        vector<Edge> mst = primMST(graph2);
+
+        for (const auto& edge : mst) {
+            totalDistance += edge.weight;
+        }
+    }
+    else if (currentAlg == "BFS") {
+        totalDistance = bfs(graph, stadiumName);
+        //qDebug() << totalDistance;
+    }
+    else if (currentAlg == "DFS") {
+        totalDistance = dfs(graph, stadiumName, visited);
+        //qDebug() << totalDistance;
+    }
+
+    QString finalText = "Total Distance: " + QString::number(totalDistance);
+    QString poopText = "Algorithm: " + algorithmStrings[currentAlg];
+
+    this->ui->labelMileage->setText(finalText);
+    this->ui->labelAlgSelected->setText(poopText);
 }
