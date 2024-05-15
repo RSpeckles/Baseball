@@ -1015,7 +1015,7 @@ void MainWindow::planTrip() {
     QString currentStadium = QString::fromStdString(currentText.substr(0, endPos - 1));
 
     // get destinations
-    vector<string> destinations;
+    QVector<string> destinations;
     int closestNum = this->ui->spinClosest->value();
 
     // get path
@@ -1044,15 +1044,31 @@ void MainWindow::planTrip() {
 
         string start_stadium = currentStadium.toStdString();
         int num_closest_stadiums = destinations.size();
+        unordered_map<string, int> distances;
+        string thisStadium = currentStadium.toStdString();
+        QVector<string> visitedStadiums = {currentStadium.toStdString()};
+        for (auto it = destinations.cbegin(); it != destinations.cend(); it++){
+            distances = dijkstra(graph, thisStadium);
+            double min = INT_MAX;
+            string nearest = "";
+            for (auto it = distances.cbegin(); it != distances.cend(); it++){
+                if (it->second < min && visitedStadiums.contains(it->first) != true && destinations.contains(it->first)){
+                    min = it->second;
+                    nearest = it->first;
+                }
+            }
+            thisStadium = nearest;
+            visitedStadiums.push_back(nearest);
+            currentPath.push_back({QString::fromStdString(nearest), min});
+        }
 
-        unordered_map<string, int> distances = dijkstra(graph, start_stadium);
-        currentPath = findClosestStadiums(distances, destinations, num_closest_stadiums);
+        // currentPath = findClosestStadiums(distances, destinations, num_closest_stadiums);
         currentPath.push_front({currentStadium, 0});
 
     }
     else {
         // if closest lol
-        currentPath = visitNumClosest(distTable, currentStadium, closestNum);
+        currentPath = shortest_path_to_all_stadiums(distTable, currentStadium);
     }
 
     // check
