@@ -37,7 +37,7 @@ int stringToInt(QString stringToConvert) {
  */
 void getGreatestAndShortestCF(QMap<QString, QMap<QString, QString>> df, int &greatestCF, int &shortestCF)
 {
-    for (auto it = df.cbegin(), end = dfdoxyg.cend(); it != end; it++){
+    for (auto it = df.cbegin(), end = df.cend(); it != end; it++){
         int currentCF = stringToInt((*it)["Distance to center field"]);
 
         if (currentCF > greatestCF) {
