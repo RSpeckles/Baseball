@@ -35,6 +35,7 @@ public slots:
     void filterTeams();
     void viewSouvenirs();
     void updateSouvenirs(QString senderName);
+    void viewInfo();
 
     // admin
     void adminTeamSelected();

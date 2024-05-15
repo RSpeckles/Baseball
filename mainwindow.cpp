@@ -408,6 +408,67 @@ void MainWindow::viewSouvenirs() {
     endPopup->exec();
 }
 
+void MainWindow::viewInfo() {
+    int row = this->ui->tableDisplay->currentRow();
+
+    // check if any row is selected
+    if (row < 0) {
+        QMessageBox::warning(this, "Display Teams", "Please select a team first!");
+        return;
+    }
+
+    QString team = this->ui->tableDisplay->item(row, 0)->text();
+
+    // popup
+    QDialog *endPopup = new QDialog();
+    QFormLayout *formLayout = new QFormLayout();
+    endPopup->setStyleSheet("font: 500 13pt \"Bahnschrift\"");
+    endPopup->resize(512, 512);
+
+    // connect ok and cancel boxes
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    QObject::connect(buttonBox, SIGNAL(accepted()), endPopup, SLOT(accept()));
+
+    // labels
+    QLabel *labelSouvenirs = new QLabel();
+    labelSouvenirs->setText(team + "\nInfo:");
+
+    // table
+    QTableWidget *table = new QTableWidget();
+    table->setFrameShape(QAbstractScrollArea::Shape::Box);
+
+    table->setColumnCount(2);
+    table->setHorizontalHeaderLabels({"Attribute", "Value"});
+    table->setRowCount(infoDf[team].size());
+
+    int index = 0;
+    for (auto it = infoDf[team].cbegin(); it != infoDf[team].cend(); ++it  )
+    {
+        QString attribute = it.key();
+        QString value = it.value();
+
+        QTableWidgetItem *attributeUI = new QTableWidgetItem(attribute);
+        QTableWidgetItem *valueUI = new QTableWidgetItem(value);
+
+        table->setItem(index, 0, attributeUI);
+        table->setItem(index, 1, valueUI);
+
+        index++;
+    }
+
+    // final
+    formLayout->addWidget(labelSouvenirs);
+    formLayout->addWidget(table);
+    formLayout->addWidget(buttonBox);
+
+    endPopup->setLayout(formLayout);
+
+    // run
+    table->setColumnWidth(0, 230);
+    table->setColumnWidth(1, 230);
+    endPopup->exec();
+}
+
 /*
  *  SOUVENIR DISPLAY FUNCTION
 */
