@@ -1,0 +1,15 @@
+@startuml
+start
+:User launches application;
+:User triggers adminLogin();
+if (Admin wants to view souvenirs) then (yes)
+    :Admin triggers viewSouvenirs();
+    :Admin triggers updateSouvenirs();
+elseif (Admin wants to edit souvenirs) then (yes)
+    :Admin triggers adminSouvenirSelected();
+    :Admin triggers adminEditSouvenir();
+endif
+:Admin triggers saveToCSV();
+:Admin triggers loadFromCSV();
+stop
+@enduml

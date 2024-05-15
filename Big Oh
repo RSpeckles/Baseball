@@ -1,0 +1,262 @@
+int primMST(const std::vector<Stadium>& graph, std::unordered_map<QString, QString>& parent) {
+    int totalDistance = 0;
+
+    std::priority_queue<std::pair<int, QString>, std::vector<std::pair<int, QString>>, std::greater<>> pq;
+
+    std::unordered_set<QString> visited;
+    pq.push({0, graph[0].name});
+
+    while (!pq.empty()) {
+        auto [weight, currentStadium] = pq.top();
+        pq.pop();
+
+        if (visited.find(currentStadium) != visited.end()) {
+            continue;
+        }
+
+        totalDistance += weight;
+        visited.insert(currentStadium);
+
+        for (const auto& [neighbor, neighborWeight] : graph[0].connections) {
+            if (visited.find(neighbor) == visited.end()) {
+                pq.push({neighborWeight, neighbor});
+                parent[neighbor] = currentStadium;
+            }
+        }
+    }
+
+    return totalDistance;
+}
+
+
+Big Oh : O(nlog(n)). 
+This is because the priority queue has a big O of log(n) and the while loop has a big O of n. Therefore, because the priority queue is the condition which the while loop utilizes, the big O becomes O(n(log(n)) as the priority queue extraction function is log(n) and repeated every while loop until empty.
+
+
+
+
+
+
+
+
+int dfs(const QMap<QString, Stadium>& graph, const QString& startStadium, QMap<QString, bool>& visited) {
+    visited[startStadium] = true;
+    int totalDistance = 0;
+
+    qDebug() << "Visited:" << startStadium;
+
+    auto it = graph.find(startStadium);
+    if (it == graph.end()) {
+        qWarning() << "Error: Starting stadium not found in the graph.";
+        return totalDistance;
+    }
+
+    for (const auto& adjacentStadium : it.value().connections.keys()) {
+        if (!visited[adjacentStadium]) {
+            int distance = it.value().connections.value(adjacentStadium);
+            qDebug() << "Traversing from" << startStadium << "to" << adjacentStadium << "(Distance:" << distance << "miles)";
+            totalDistance += distance + dfs(graph, adjacentStadium, visited);
+        }
+    }
+
+    return totalDistance;
+}
+
+Big Oh : O(n) 
+This is because the Big Oh of a for loop is n and due to that being the largest big Oh within the function, O(n) ends up being the big Oh of the function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int bfs(const unordered_map<string, Stadium>& graph, const string& startStadium) {
+    unordered_map<string, int> mileage;
+    queue<string> q;
+    for (const auto& entry : graph) {
+        mileage[entry.first] = numeric_limits<int>::max();
+    }
+    q.push(startStadium);
+    mileage[startStadium] = 0;
+    int totalDistance = 0;
+    while (!q.empty()) {
+        string currentStadium = q.front();
+        q.pop();
+        for (const auto& [adjacentStadium, distance] : graph.at(currentStadium).connections) {
+            if (mileage[currentStadium] + distance < mileage[adjacentStadium]) {
+                mileage[adjacentStadium] = mileage[currentStadium] + distance;
+                q.push(adjacentStadium);
+                totalDistance += distance;
+            }
+        }
+    }
+    return totalDistance;
+}
+
+
+Big Oh : O(n^2)
+This is because inside the function there is a while loop which contains a for loop within. Each of those functions have O(n) time complexity therefore, because the for loop is within the while, the overall complexity is O(n^2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QVector<QPair<QString, double>> dijkstra(QMap<QString, QMap<QString, double>>& distTable, QString start, QString end) {
+    QMap<QString, double> distance;
+    QMap<QString, QString> previous;
+    std::priority_queue<QPair<double, QString>> pq;
+
+    for (auto it = distTable.begin(); it != distTable.end(); ++it) {
+        distance[it.key()] = std::numeric_limits<double>::max();
+    }
+    distance[start] = 0;
+
+    pq.push({0, start});
+
+    while (!pq.empty()) {
+        QString current = pq.top().second;
+        pq.pop();
+
+        if (current == end) {
+            break;
+        }
+
+        for (auto it = distTable[current].begin(); it != distTable[current].end(); ++it) {
+            double newDist = distance[current] + *it;
+            if (newDist < distance[it.key()]) {
+                distance[it.key()] = newDist;
+                previous[it.key()] = current;
+                pq.push({newDist, it.key()});
+            }
+        }
+    }
+
+    QVector<QPair<QString, double>> path;
+    QString current = end;
+    while (previous.find(current) != previous.end()) {
+        path.push_back({current, distance[current]});
+        current = previous[current];
+    }
+    path.push_back({start, 0});
+    std::reverse(path.begin(), path.end());
+
+    return path;
+}
+
+Big Oh : O(nlog(n))
+This is because there is 4 loops, the first for loop has O(n) complexity, the next two loops have O(nlog(n)) because they each have a priority queue push and pop which have a log(n) complexity within it, and finally the last loop has a O(n). We can ignore the O(n)’s and therefore we get n(log(n))*2 = 2n(log(n)) which is the same as saying nlog(n)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void df_to_csv(string path,
+               QMap<QString, QMap<QString, double>> const dataframe,
+               QString label)
+{
+    ofstream csv;
+    cout << path << endl;
+    csv.open(path);
+
+    if (!csv) {
+        cout << "Could not open file! :(" << endl;
+        return;
+    }
+
+    csv << label.toStdString() << "\n";
+
+    for (auto i = dataframe.begin(); i != dataframe.end(); i++) {
+        for (auto j = i->begin(); j != i->end(); j++) {
+            bool flag = false;
+            foreach (QChar c, i.key()) {
+                if (c == ',') {
+                    flag = true;
+                }
+            }
+
+            if (flag) {
+                csv << "\"" << i.key().toStdString() << "\""
+                    << ",";
+            } else {
+                csv << i.key().toStdString() << ",";
+            }
+
+            flag = false;
+
+            foreach (QChar c, j.key()) {
+                if (c == ',') {
+                    flag = true;
+                }
+            }
+
+            if (flag)
+                csv << "\"" << j.key().toStdString() << "\""
+                    << ",";
+            else
+                csv << j.key().toStdString() << ",";
+
+            csv << fixed << setprecision(2) << j.value() << "\n";
+        }
+    }
+}
+
+Big Oh : O(n^2)
+This is because the largest big O within the function is the nested for loop which has a complexity of O(n^2). This is due to the fact that each loop is O(n) and if one is in the other it becomes O(n^2).

@@ -1,3 +1,7 @@
+/**
+ * @file algorithms.h
+ * @brief This file contains the declaration of various algorithms and helper functions.
+ */
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
 
@@ -15,6 +19,10 @@
 #include <vector>
 #include <unordered_map>
 
+/**
+ * @struct Distance
+ * @brief A structure to represent a distance between two stadiums.
+ */
 struct Distance {
     QString srcStadium;
     QString destStadium;
@@ -23,6 +31,10 @@ struct Distance {
     Distance(const QString& src, const QString& dest, int dist) : srcStadium(src), destStadium(dest), distance(dist) {}
 };
 
+/**
+ * @struct Stadium
+ * @brief A structure to represent a stadium and its connections.
+ */
 struct Stadium {
     QString name;
     std::vector<std::pair<QString, int>> connections;
@@ -32,6 +44,10 @@ struct Stadium {
     Stadium(const QString& n) : name(n) {} // Constructor with name argument
 };
 
+/**
+ * @struct Edge
+ * @brief A structure to represent an edge in a graph.
+ */
 struct Edge {
     std::string src;
     std::string dest;
@@ -39,12 +55,21 @@ struct Edge {
     Edge(std::string s, std::string d, int w) : src(s), dest(d), weight(w) {}
 };
 
+/**
+ * @struct CompareEdge
+ * @brief A structure to compare two edges based on their weights.
+ */
 struct CompareEdge {
     bool operator()(const Edge& e1, const Edge& e2) const {
         return e1.weight > e2.weight;
     }
 };
 
+/**
+ * @brief Function to parse a CSV file and build a vector of distances.
+ * @param filename The name of the CSV file.
+ * @return A vector of distances.
+ */
 std::vector<Distance> parseDistanceCSV(const QString& filename) {
     std::vector<Distance> distances;
     QFile file(filename);
@@ -74,6 +99,11 @@ std::vector<Distance> parseDistanceCSV(const QString& filename) {
     return distances;
 }
 
+/**
+ * @brief Function to build a graph from a vector of distances.
+ * @param distances A vector of distances.
+ * @return A vector of stadiums.
+ */
 std::vector<Stadium> buildGraph(const std::vector<Distance>& distances) {
     std::unordered_set<QString> uniqueStadiums;
     std::vector<Stadium> graph;
@@ -97,19 +127,31 @@ std::vector<Stadium> buildGraph(const std::vector<Distance>& distances) {
 
     return graph;
 }
-
+/**
+ * @brief Function to print the path of a minimum spanning tree.
+ * @param parent The parent map of the minimum spanning tree.
+ */
 void printMSTPath(const std::unordered_map<QString, QString>& parent) {
     qDebug() << "Minimum Spanning Tree Path:";
     for (const auto& [child, parent] : parent) {
         qDebug() << parent << " -> " << child;
     }
 }
-
+/**
+ * @struct StadiumQ
+ * @brief A structure to represent a stadium and its connections in a QMap.
+ */
 struct StadiumQ {
     QString name;
     QMap<QString, int> connections;
 };
 
+
+/**
+ * @brief Function to parse a CSV file and build a graph.
+ * @param filename The name of the CSV file.
+ * @return A graph in the form of a QMap.
+ */
 QMap<QString, StadiumQ> parseCSV(const QString& filename) {
     QMap<QString, StadiumQ> graph;
     QFile file(filename);
@@ -139,7 +181,11 @@ QMap<QString, StadiumQ> parseCSV(const QString& filename) {
     file.close();
     return graph;
 }
-
+/**
+ * @brief Function to parse a CSV file and build a graph.
+ * @param file_path The path of the CSV file.
+ * @return A graph in the form of an unordered_map.
+ */
 std::unordered_map<std::string, std::vector<std::pair<std::string, int>>> parseCSV2(const QString& file_path) {
     std::ifstream file(file_path.toStdString());
     std::unordered_map<std::string, std::vector<std::pair<std::string, int>>> graph;
@@ -165,7 +211,13 @@ std::unordered_map<std::string, std::vector<std::pair<std::string, int>>> parseC
 
     return graph;
 }
-
+/**
+ * @brief Function to perform a depth-first search on a graph.
+ * @param graph The graph to perform the search on.
+ * @param startStadium The starting stadium for the search.
+ * @param visited A QMap to keep track of visited stadiums.
+ * @return The total distance travelled.
+ */
 int dfs(const QMap<QString, StadiumQ>& graph, const QString& startStadium, QMap<QString, bool>& visited) {
     visited[startStadium] = true;
     int totalDistance = 0;
@@ -188,6 +240,12 @@ int dfs(const QMap<QString, StadiumQ>& graph, const QString& startStadium, QMap<
 
     return totalDistance;
 }
+/**
+ * @brief Function to perform a breadth-first search on a graph.
+ * @param graph The graph to perform the search on.
+ * @param startStadium The starting stadium for the search.
+ * @return The total distance travelled.
+ */
 
 int bfs(const QMap<QString, StadiumQ>& graph, const QString& startStadium) {
     QMap<QString, int> mileage;
@@ -211,7 +269,11 @@ int bfs(const QMap<QString, StadiumQ>& graph, const QString& startStadium) {
 
     return totalDistance;
 }
-
+/**
+ * @brief Function to find the minimum spanning tree of a graph using Prim's algorithm.
+ * @param graph The graph to find the minimum spanning tree of.
+ * @return A vector of edges representing the minimum spanning tree.
+ */
 std::vector<Edge> primMST(const std::unordered_map<std::string, std::vector<std::pair<std::string, int>>>& graph) {
     std::vector<Edge> mst;
     std::unordered_map<std::string, bool> visited;

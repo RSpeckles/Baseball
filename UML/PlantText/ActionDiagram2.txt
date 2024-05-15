@@ -1,0 +1,19 @@
+@startuml
+start
+if (User wants to plan a trip) then (yes)
+    :User triggers getDestinations();
+    :User triggers planTrip();
+    if (User wants to start trip) then (yes)
+        :User triggers startTrip();
+        if (User wants to go to next stop) then (yes)
+            :User triggers nextStop();
+        else (User wants to purchase souvenirs)
+            :User triggers purchase();
+        endif
+    endif
+else (User wants to run algorithm)
+    :User triggers algorithmChanged();
+    :User triggers runAlgorithm();
+endif
+stop
+@enduml

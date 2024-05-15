@@ -1,0 +1,13 @@
+@startuml
+start
+:User launches application;
+:Application triggers initialize();
+:User navigates to "Stadium Planning";
+:Application triggers initializeStadiumPlan();
+if (User wants to view stadium info) then (yes)
+    :User selects stadium;
+    :Application triggers setCurrentDestination();
+endif
+:User triggers endTripScreen();
+stop
+@enduml
