@@ -1,0 +1,12 @@
+@startuml
+start
+:User triggers adminLogin();
+if (Admin wants to edit team) then (yes)
+    :Admin triggers adminTeamSelected();
+    :Admin triggers adminConfirmEdit();
+else (Admin wants to edit souvenirs)
+    :Admin triggers adminSouvenirSelected();
+    :Admin triggers adminEditSouvenir();
+endif
+stop
+@enduml
