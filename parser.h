@@ -9,6 +9,11 @@
 #include <string>
 
 using namespace std;
+/**
+ * @brief Parses a CSV file and converts it into a QMap data structure.
+ * @param path The path to the CSV file.
+ * @param dataframe The QMap to store the parsed data.
+ */
 void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &dataframe)
 {
     ifstream csv(path);
@@ -57,6 +62,11 @@ void csv_to_table(std::string path, QMap<QString, QMap<QString, double>> &datafr
     }
 }
 
+/**
+ * @brief Parses a CSV file and converts it into a QMap data structure.
+ * @param path The path to the CSV file.
+ * @param dataframe The QMap to store the parsed data.
+ */
 void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &dataframe)
 {
     // cout << "AAA" << endl;
@@ -132,6 +142,12 @@ void csv_to_df(std::string path, QMap<QString, QMap<QString, QString>> &datafram
 //eg. "Team name,Souvenir,Cost"
 
 // souvenirTable
+/**
+ * @brief Writes data from a QMap data structure to a CSV file.
+ * @param path The path to the CSV file to write to.
+ * @param dataframe The QMap containing the data to write.
+ * @param label The title of rows in the CSV file.
+ */
 void df_to_csv(string path,
                QMap<QString, QMap<QString, double>> const dataframe,
                QString label)
@@ -182,7 +198,12 @@ void df_to_csv(string path,
     }
 }
 
-// infoDf
+/**
+ * @brief Writes data from a QMap data structure to a CSV file.
+ * @param path The path to the CSV file to write to.
+ * @param dataframe The QMap containing the data to write.
+ * @param label The title of rows in the CSV file.
+ */
 void df_to_csv(string path,
                QMap<QString, QMap<QString, QString>> const dataframe,
                QString label)

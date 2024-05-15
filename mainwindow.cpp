@@ -25,10 +25,18 @@
 
 using namespace std;
 
+/**
+ * @brief MainWindow constructor.
+ * @param parent The parent widget.
+ *
+ * The MainWindow constructor initializes the main window of the application. It sets up the user
+ * interface, loads data from CSV files, and initializes various data structures used throughout
+ * the application. The constructor also sets up connections for various signals and slots.
+ */
 // constructor/destructor (code inside will probably be moved once rowan is done)
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+        : QMainWindow(parent)
+        , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -66,45 +74,54 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 }
-
+/**
+ * @brief MainWindow destructor.
+ *
+ * The MainWindow destructor is responsible for cleaning up and deallocating resources used by
+ * the main window.
+ */
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-/*
- *  CHANGE SCREEN FUNCTION
+/**
+ * @brief Function to change the page.
  *
- *  This map associates button names to their corresponding desired page in the stacked widget.
- *  When any button designed to change the page is pressed, the function takes the button name
- *  and uses the map to find the desired page name.
- *
- *  To add your own button, create a connection using the signal editor that goes into the
- *  "changePage" function.
-*/
-
+ * This function is responsible for changing the currently displayed page or widget in the main
+ * window. It uses a map to associate button names with the desired page names. When a button
+ * designed to change the page is pressed, the function takes the button name and uses the map
+ * to find the desired page name, and then switches to that page.
+ */
 map<QString, QString> buttonMap = {
-    // buttons
-    {"buttonDisplay", "display"},
-    {"buttonPlan", "plan"},
-    {"buttonAdmin", "adminlogin"},
-    {"buttonStartTrip", "virtualtrip"},
-    {"buttonAlgorithm", "algorithm"},
+        // buttons
+        {"buttonDisplay", "display"},
+        {"buttonPlan", "plan"},
+        {"buttonAdmin", "adminlogin"},
+        {"buttonStartTrip", "virtualtrip"},
+        {"buttonAlgorithm", "algorithm"},
 
-    // back buttons
-    {"backDisplay", "home"},
-    {"backPlan", "home"},
-    {"backAdmin", "home"},
-    {"backLogin", "home"},
-    {"backVirtualTrip", "plan"},
-    {"backAlgorithm", "home"},
+        // back buttons
+        {"backDisplay", "home"},
+        {"backPlan", "home"},
+        {"backAdmin", "home"},
+        {"backLogin", "home"},
+        {"backVirtualTrip", "plan"},
+        {"backAlgorithm", "home"},
 
-    // special condition
-    // allows us to pass an argument into the function, which dictates which page it wants to go to.
-    {"loginSuccess", "adminpanel"},
-    {"endTrip",     "plan"},
+        // special condition
+        // allows us to pass an argument into the function, which dictates which page it wants to go to.
+        {"loginSuccess", "adminpanel"},
+        {"endTrip",     "plan"},
 };
 
+/**
+ * @brief Function to change the page to a specific page.
+ * @param specific The name of the specific page.
+ *
+ * This function changes the currently displayed page or widget in the main window to a specific
+ * page. It takes a QString parameter `specific` that represents the name of the desired page.
+ * The function uses a map to find the corresponding page name and then switches to that page.
+ */
 // default changePage function
 void MainWindow::changePage()
 {
@@ -126,6 +143,10 @@ void MainWindow::changePage()
     }
 }
 
+/**
+ * @brief Function to change the page to a specific page.
+ * @param specific The name of the specific page.
+ */
 // changePage function that allows an argument to be passed
 void MainWindow::changePage(QString specific)
 {
@@ -142,15 +163,18 @@ void MainWindow::changePage(QString specific)
     }
 }
 
-/*
- *  ADMIN LOGIN FUNCTION
- *
- *  This function is connected to the "login" button in the admin login page.
-*/
 
-// admin password
+
 const QString adminPassword = "admin";
 
+/**
+ * @brief Function to handle admin login.
+ *
+ * This function is responsible for handling the admin login functionality. It retrieves the
+ * entered password from the input field, compares it with the stored admin password, and
+ * either displays a success message and changes to the admin panel page, or displays a warning
+ * message if the password is incorrect.
+ */
 void MainWindow::adminLogin()
 {
     QString password = ui->inputPassword->text();
@@ -173,6 +197,14 @@ void MainWindow::adminLogin()
 */
 
 // initialize table
+
+/**
+ * @brief Function to initialize the table.
+ * @param tableUI The table widget to initialize.
+ * @param totalUI The total UI label to initialize.
+ * @param teams The teams to display in the table.
+ * @param infoDf The information dataframe.
+ */
 void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf)
 {
     // set sorting to false so doesnt break
@@ -214,7 +246,7 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
 
             // if key is empty then ignore
             //if (key == "") { continue; }
-          
+
             QTableWidgetItem *data = new QTableWidgetItem(value);
             tableUI->setItem(index, headers[key], data);
             //count++;
@@ -228,9 +260,9 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
     }
 
     totalUI->setText(
-        "Total Teams: " + QString::number(teams.size())
-        + "\nTotal Capacity: " + QString::number(totalCapacity)
-        );
+            "Total Teams: " + QString::number(teams.size())
+            + "\nTotal Capacity: " + QString::number(totalCapacity)
+    );
 
     // enable sorting again
     tableUI->setSortingEnabled(true);
@@ -260,7 +292,11 @@ void initializeTable(QTableWidget *tableUI, QLabel *totalUI, QVector<QString> te
     */
 }
 
-// initalize lists
+/**
+ * @brief Function to initialize the list.
+ * @param listUI The list widget to initialize.
+ * @param infoDf The information dataframe.
+ */
 void initializeList(QListWidget *listUI, QMap<QString, QMap<QString, QString>> infoDf)
 {
     listUI->clear();
@@ -272,9 +308,18 @@ void initializeList(QListWidget *listUI, QMap<QString, QMap<QString, QString>> i
     }
 }
 
-// define admin stuff
+/**
+ * @brief Function to initialize the attributes.
+ * @param comboUI The combo box UI to initialize.
+ * @param teams The teams to display in the combo box.
+ * @param infoDf The information dataframe.
+ */
 void initializeAttributes(QComboBox *comboUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf);
 
+/**
+ * @brief Function to initialize the purchase table.
+ * @param tableUI The table widget to initialize.
+ */
 void initializePurchase(QTableWidget *tableUI) {
     tableUI->setColumnCount(3);
     tableUI->setColumnWidth(0, 265);
@@ -283,7 +328,13 @@ void initializePurchase(QTableWidget *tableUI) {
     tableUI->setHorizontalHeaderLabels({"Souvenir", "Cost", "Quantity"});
 }
 
-// init func
+/**
+ * @brief Function to initialize the main window.
+ *
+ * This function initializes various components of the main window, including the team display
+ * table, admin list, attribute combo box, and souvenir purchase table. It also initializes the
+ * stadium plan and algorithm components.
+ */
 void MainWindow::initialize() {
     // get list of current stadiums
     QVector<QString> teams;
@@ -311,14 +362,21 @@ void MainWindow::initialize() {
 
 // takes the text from the combo box and converts it to data for the function to read
 map<QString, QString> filterMap = {
-    {"Major League", "Major"},
-    {"National League", "National"},
-    {"American League", "American"},
-    {"Open Roof", "Open"},
-    {"Greatest Distance to Center Field", "GreatestCF"},
-    {"Shortest Distance to Center Field", "ShortestCF"},
-    };
-
+        {"Major League", "Major"},
+        {"National League", "National"},
+        {"American League", "American"},
+        {"Open Roof", "Open"},
+        {"Greatest Distance to Center Field", "GreatestCF"},
+        {"Shortest Distance to Center Field", "ShortestCF"},
+};
+/**
+ * @brief Function to filter teams.
+ *
+ * This function is responsible for filtering the teams displayed in the table based on a
+ * selected filter. It retrieves the filter from the combo box, maps it to a corresponding
+ * filter string, sorts the teams based on the filter, and updates the table display with the
+ * filtered teams.
+ */
 void MainWindow::filterTeams()
 {
     QString filter = ui->filterDisplay->currentText();
@@ -339,7 +397,13 @@ void MainWindow::filterTeams()
  *
  *  Handles the "view souvenirs" button in the display page
 */
-
+/**
+ * @brief Function to view souvenirs.
+ *
+ * This function handles the "view souvenirs" button in the display page. It retrieves the
+ * currently selected team, checks if souvenirs exist for that team, and displays a popup
+ * window with the list of souvenirs and their corresponding costs.
+ */
 void MainWindow::viewSouvenirs() {
     int row = this->ui->tableDisplay->currentRow();
 
@@ -412,11 +476,21 @@ void MainWindow::viewSouvenirs() {
  *  SOUVENIR DISPLAY FUNCTION
 */
 
-map<QString, QString> souvenirMap = {
-    // buttons
-    {"adminList",   "adminSouvenirList"},
-    };
 
+map<QString, QString> souvenirMap = {
+        // buttons
+        {"adminList",   "adminSouvenirList"},
+};
+
+/**
+ * @brief Function to update souvenirs.
+ * @param senderName The name of the sender.
+ *
+ * This function updates the list of souvenirs displayed for a selected team. It takes a
+ * `senderName` parameter that represents the name of the sender object (e.g., a list widget
+ * or button). The function finds the corresponding souvenir list object, clears it, and
+ * populates it with the souvenirs for the selected team.
+ */
 void MainWindow::updateSouvenirs(QString senderName) {
     if (souvenirMap.find(senderName) != souvenirMap.end()) {
         // get item selected
@@ -450,6 +524,17 @@ void MainWindow::updateSouvenirs(QString senderName) {
  *  Admin functions
 */
 
+
+/**
+ * @brief Function to initialize the attributes.
+ * @param comboUI The combo box UI to initialize.
+ * @param teams The teams to display in the combo box.
+ * @param infoDf The information dataframe.
+ *
+ * This function initializes a combo box with team attributes from the provided information
+ * dataframe. It populates the combo box with the attributes, excluding the team name and
+ * stadium name.
+ */
 void initializeAttributes(QComboBox *comboUI, QVector<QString> teams, QMap<QString, QMap<QString, QString>> infoDf) {
     // disable so that "textChanged" connection doesnt loop forever
     comboUI->setEnabled(false);
@@ -468,6 +553,9 @@ void initializeAttributes(QComboBox *comboUI, QVector<QString> teams, QMap<QStri
     comboUI->setEnabled(true);
 }
 
+/**
+ * @brief Function to confirm an admin edit.
+ */
 QString updateValue(QString attribute, QString team, QMap<QString, QMap<QString, QString>> infoDf) {
     // make sure team and attribute exist when updating value
     if (infoDf.find(team) != infoDf.end()) {
@@ -478,7 +566,11 @@ QString updateValue(QString attribute, QString team, QMap<QString, QMap<QString,
     return "null";
 }
 
+
 QString currentTeam = "";
+/**
+ * @brief Function to handle when an admin team is selected.
+ */
 void MainWindow::adminTeamSelected()
 {
     // get the button object and name that got pressed
@@ -521,79 +613,85 @@ void MainWindow::adminTeamSelected()
 }
 
 // map that uses attributes as the key to check for errors
+/**
+ * @brief Function to handle an admin edit souvenir.
+ */
 QMap<QString, function<bool(QString&, MainWindow*, QMap<QString, QMap<QString, QString>>)>> editChecks = {
-    {"Seating capacity", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
-        {
-            bool conversionOK;
-            int value = attribute.toInt(&conversionOK);
-            if (!conversionOK) {
-                QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
-                return false;
-            }
-            if (value <= 0) {
-                QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
-                return false;
-            }
-            return true;
-        }
-    },
-    {"League", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
-        {
-        if (attribute != "National" && attribute != "American") {
-            QMessageBox::warning(mainWindow, "Admin Edit", "Please enter National or American!");
-            return false;
-        }
-        return true;
-        }
-    },
-    {"Date opened", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
-        {
-        bool conversionOK;
-        int value = attribute.toInt(&conversionOK);
-        if (!conversionOK) {
-             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
-             return false;
-        }
-        if (value <= 0) {
-             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
-             return false;
-        }
-        return true;
-        }
-    },
-    {"Distance to center field", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
-        {
-         bool conversionOK;
-         int value = attribute.toInt(&conversionOK);
-         if (!conversionOK) {
-             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
-             return false;
-         }
-         if (value <= 0) {
-             QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
-             return false;
-         }
-         int meters = value / 3.281; // google told me this
-         attribute = attribute + " feet (" + QString::number(meters) + " m)";
+        {"Seating capacity", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+                             {
+                                 bool conversionOK;
+                                 int value = attribute.toInt(&conversionOK);
+                                 if (!conversionOK) {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
+                                     return false;
+                                 }
+                                 if (value <= 0) {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
+                                     return false;
+                                 }
+                                 return true;
+                             }
+        },
+        {"League", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+                             {
+                                 if (attribute != "National" && attribute != "American") {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter National or American!");
+                                     return false;
+                                 }
+                                 return true;
+                             }
+        },
+        {"Date opened", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+                             {
+                                 bool conversionOK;
+                                 int value = attribute.toInt(&conversionOK);
+                                 if (!conversionOK) {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
+                                     return false;
+                                 }
+                                 if (value <= 0) {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
+                                     return false;
+                                 }
+                                 return true;
+                             }
+        },
+        {"Distance to center field", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+                             {
+                                 bool conversionOK;
+                                 int value = attribute.toInt(&conversionOK);
+                                 if (!conversionOK) {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter an int!");
+                                     return false;
+                                 }
+                                 if (value <= 0) {
+                                     QMessageBox::warning(mainWindow, "Admin Edit", "Please enter a value greater than 0!");
+                                     return false;
+                                 }
+                                 int meters = value / 3.281; // google told me this
+                                 attribute = attribute + " feet (" + QString::number(meters) + " m)";
 
-         return true;
-     }
-    },
-    {"Team name", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
-        {
-        for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
-        {
-            if (it.value()["Team name"] == attribute) {
-                QMessageBox::warning(mainWindow, "Admin Edit", "Team name already exists!");
-                return false;
-            }
-        }
+                                 return true;
+                             }
+        },
+        {"Team name", [](QString& attribute, MainWindow* mainWindow, QMap<QString, QMap<QString, QString>> infoDf)
+                             {
+                                 for (auto it = infoDf.cbegin(); it != infoDf.cend(); ++it  )
+                                 {
+                                     if (it.value()["Team name"] == attribute) {
+                                         QMessageBox::warning(mainWindow, "Admin Edit", "Team name already exists!");
+                                         return false;
+                                     }
+                                 }
 
-            return true;
-        }
-    },
+                                 return true;
+                             }
+        },
 };
 
+/**
+ * @brief Function to confirm an admin edit.
+ */
 void MainWindow::adminConfirmEdit(){
     QString newValue = this->ui->attributeEdit->text();
     QString currentAttribute = this->ui->attributeCombo->currentText();
@@ -623,7 +721,9 @@ void MainWindow::adminConfirmEdit(){
     this->initialize();
 }
 
-// souvenir stuff for admin
+/**
+ * @brief Function to handle when an admin souvenir is selected.
+ */
 void MainWindow::adminSouvenirSelected() {
     if (this->ui->adminSouvenirList->currentItem()) {
         this->ui->buttonSouvenirEdit->setEnabled(true);
@@ -635,6 +735,17 @@ void MainWindow::adminSouvenirSelected() {
     }
 }
 
+/**
+ * @brief Converts a string to a double.
+ *
+ * This function attempts to convert a string to a double. If the conversion is successful,
+ * the result is stored in the reference parameter and the function returns true. If the
+ * conversion fails, the function returns false.
+ *
+ * @param inputString The string to convert.
+ * @param result Reference to a double where the result will be stored if the conversion is successful.
+ * @return true if the conversion is successful, false otherwise.
+ */
 bool stringToDouble(string inputString, double &result) {
     char* end;
     result = strtod(inputString.c_str(), &end);
@@ -643,6 +754,16 @@ bool stringToDouble(string inputString, double &result) {
 }
 
 
+
+/**
+ * @brief Handles the editing of souvenirs in the admin panel.
+ *
+ * This function is called when the admin clicks on the "Edit Souvenir" button. It opens a dialog
+ * where the admin can edit the name and cost of the souvenir. The changes are then applied to the
+ * souvenir table. If the admin clicks on the "Add Souvenir" button, a new souvenir with a default
+ * name and cost is added. If the admin clicks on the "Remove Souvenir" button, the selected souvenir
+ * is removed from the table.
+ */
 void MainWindow::adminEditSouvenir() {
     // get the button object and name that got pressed
     QObject* senderObject = sender();
@@ -742,7 +863,12 @@ void MainWindow::adminEditSouvenir() {
     this->adminSouvenirSelected();
 }
 
-// save data to csv
+/**
+ * @brief Function to save data to CSV.
+ *
+ * This function saves the data from the application to CSV files. It saves the information
+ * dataframe, souvenir table, and distance table to their respective CSV files.
+ */
 void MainWindow::saveToCSV() {
     QDir directory;
     directory.cdUp();
@@ -766,6 +892,14 @@ void MainWindow::saveToCSV() {
 
 // load new files from csv
 bool alreadyRead = false;
+/**
+* @brief Function to load data from CSV.
+*
+* This function loads data from CSV files into the application. It reads the distance table,
+* information dataframe, and souvenir table from their respective CSV files. It also updates
+* a progress bar to indicate the loading progress and enables/disables certain UI elements
+* based on the loaded data.
+*/
 void MainWindow::loadFromCSV() {
     if (alreadyRead) { return; }
     alreadyRead = true;
@@ -803,6 +937,14 @@ void MainWindow::loadFromCSV() {
  * PLAN TRIP STUFF
  */
 
+
+/**
+* @brief Function to initialize the stadium plan.
+*
+* This function initializes the components related to the stadium plan feature. It clears the
+* stadium combo box and the path result list, disables the "Start Trip" button, and populates
+* the stadium combo box with the list of stadiums and their corresponding teams.
+*/
 void MainWindow::initializeStadiumPlan() {
     this->ui->comboPlanStadiums->clear();
     this->ui->listPathResult->clear();
@@ -818,6 +960,14 @@ void MainWindow::initializeStadiumPlan() {
     }
 }
 
+/**
+* @brief Function to get destinations.
+*
+* This function retrieves the list of potential destinations based on the currently selected
+* stadium. It clears the list of destinations, finds the team associated with the selected
+* stadium, and populates the destination list with all other stadiums, excluding the selected
+* one. Each destination is displayed as a checkable item in the list.
+*/
 void MainWindow::getDestinations() {
     // get name of college selected
     string currentText = this->ui->comboPlanStadiums->currentText().toStdString();
@@ -849,6 +999,15 @@ void MainWindow::getDestinations() {
 QVector<QPair<QString, double>> currentPath;
 int currentIndex = 0;
 
+
+/**
+* @brief Function to plan a trip.
+*
+* This function plans a trip based on the selected starting stadium and the chosen destinations.
+* It retrieves the selected starting stadium, gets the list of destinations (either by selecting
+* individual destinations or using the "closest" option), calculates the path using a graph
+* algorithm, and displays the path with the total distance in the user interface.
+*/
 void MainWindow::planTrip() {
     // get name of stadium selected
     string currentText = this->ui->comboPlanStadiums->currentText().toStdString();
@@ -892,7 +1051,7 @@ void MainWindow::planTrip() {
 
     }
     else {
-    // if closest lol
+        // if closest lol
         currentPath = visitNumClosest(distTable, currentStadium, closestNum);
     }
 
@@ -941,6 +1100,10 @@ void MainWindow::planTrip() {
     this->ui->labelTotalDistance->setText("Total Distance: " + QString::number(totalDist) + " miles");
 }
 
+/**
+ * @brief Function to set the current destination.
+ * @param index The index of the current destination.
+ */
 void MainWindow::setCurrentDestination(int index) {
     if (currentPath.size() < 2) { return; }
 
@@ -1009,6 +1172,13 @@ void MainWindow::setCurrentDestination(int index) {
 }
 
 int currentDestination = 0;
+/**
+* @brief Function to start a trip.
+*
+* This function initiates the virtual trip based on the planned path. It sets the current
+* destination to the first stop in the path, displays the corresponding information, and
+* changes the page to the "Virtual Trip" view.
+*/
 void MainWindow::startTrip() {
     currentDestination = 0;
     this->setCurrentDestination(currentDestination);
@@ -1028,6 +1198,14 @@ double getTotalOfSouvenirs(QVector<QPair<QString, double>> &souvenirs) {
     return total;
 }
 
+/**
+* @brief Function to go to the next stop.
+*
+* This function handles the transition to the next stop in the virtual trip. It adds the
+* purchased souvenirs from the current stop to the total souvenirs list, clears the current
+* souvenirs list, and either updates the UI to display the next stop or displays the end trip
+* screen if it's the last stop.
+*/
 void MainWindow::nextStop() {
     //add currentSouvenirs to total
     for (QPair<QString, double> souvenir : currentSouvenirs) {
@@ -1046,6 +1224,15 @@ void MainWindow::nextStop() {
         this->setCurrentDestination(currentDestination);
     }
 }
+
+/**
+* @brief Function to handle a purchase.
+*
+* This function allows the user to purchase souvenirs at the current stop during the virtual
+* trip. It iterates through the souvenir table, retrieves the selected quantities for each
+* souvenir, adds the purchased souvenirs to the current souvenirs list, and updates the total
+* spent on souvenirs.
+*/
 
 void MainWindow::purchase() {
     bool itemsSelected = false;
@@ -1084,6 +1271,10 @@ void MainWindow::purchase() {
     this->ui->labelPurchaseTotal->setText(totalString);
 }
 
+/**
+ * @brief Function to end the trip and display the screen.
+ * @param totalSouvenirs The total souvenirs.
+ */
 void MainWindow::endTripScreen(QVector<QPair<QString, double>> &totalSouvenirs) {
     // EDIT POPUP
     QDialog *endPopup = new QDialog();
@@ -1143,7 +1334,12 @@ void MainWindow::endTripScreen(QVector<QPair<QString, double>> &totalSouvenirs) 
 /*
  * PLAN TRIP STUFF
  */
-
+/**
+* @brief Function to initialize the algorithm UI.
+*
+* This function initializes the user interface components related to the algorithm feature.
+* It populates the stadium combo box with the list of stadiums and their corresponding teams.
+*/
 void MainWindow::intializeAlgorithm() {
     this->ui->comboStadium->clear();
 
@@ -1158,7 +1354,13 @@ void MainWindow::intializeAlgorithm() {
 
     this->algorithmChanged();
 }
-
+/**
+* @brief Function to handle algorithm selection.
+*
+* This function is called when the user selects a different algorithm from the combo box. It
+* enables or disables the stadium combo box based on whether the selected algorithm requires
+* a starting stadium or not.
+*/
 void MainWindow::algorithmChanged() {
     QString currentAlg = this->ui->comboAlgorithm->currentText();
 
@@ -1166,11 +1368,19 @@ void MainWindow::algorithmChanged() {
 }
 
 QMap<QString, QString> algorithmStrings = {
-    {"MST", "Minimum Spanning Tree (Prim's)"},
-    {"BFS", "Breadth First Search"},
-    {"DFS", "Depth First Search"},
+        {"MST", "Minimum Spanning Tree (Prim's)"},
+        {"BFS", "Breadth First Search"},
+        {"DFS", "Depth First Search"},
 };
 
+/**
+ * @brief Executes the selected algorithm.
+ *
+ * This function runs the algorithm selected in the combo box on the graph.
+ * The graph is loaded from a CSV file. The function handles three types of algorithms:
+ * Minimum Spanning Tree (Prim's), Breadth First Search, and Depth First Search.
+ * Depending on the algorithm, it may also use the selected stadium as a starting point.
+ */
 void MainWindow::runAlgorithm() {
     // load file
     QDir distPath;

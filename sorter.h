@@ -13,6 +13,11 @@ QRegularExpression digits("\\d+"); // Matches one or more digits
 using namespace std;
 
 // since strings can be something like "407 feet (124m)" we need to convert the first num into an int
+/**
+ * @brief Converts a QString to an integer by extracting the first sequence of digits.
+ * @param stringToConvert The QString to convert.
+ * @return The integer value extracted from the QString.
+ */
 int stringToInt(QString stringToConvert) {
     QRegularExpressionMatch match = digits.match(stringToConvert);
 
@@ -24,10 +29,15 @@ int stringToInt(QString stringToConvert) {
     return 0;
 }
 
-// function returns greatest and shortestC= CF
+/**
+ * @brief Finds the greatest and shortest center field distances from a dataframe.
+ * @param df The dataframe containing stadium information.
+ * @param greatestCF Output parameter to store the greatest center field distance.
+ * @param shortestCF Output parameter to store the shortest center field distance.
+ */
 void getGreatestAndShortestCF(QMap<QString, QMap<QString, QString>> df, int &greatestCF, int &shortestCF)
 {
-    for (auto it = df.cbegin(), end = df.cend(); it != end; it++){
+    for (auto it = df.cbegin(), end = dfdoxyg.cend(); it != end; it++){
         int currentCF = stringToInt((*it)["Distance to center field"]);
 
         if (currentCF > greatestCF) {
@@ -47,6 +57,15 @@ void getGreatestAndShortestCF(QMap<QString, QMap<QString, QString>> df, int &gre
 // "Open" only shows leagues with open roof stadiums.
 // "GreatestCF" only shows leagues with the greatest CF.
 // "ShortestCF" only shows leagues with the shortest CF.
+
+/**
+ * @brief Sorts teams based on a specified aspect and filter criteria.
+ * @param df The dataframe containing team information.
+ * @param sort_by The aspect to sort by (default is "Team name").
+ * @param filter The filter criteria for teams (default is "Major").
+ *               Options include "Major", "American", "National", "Open", "GreatestCF", and "ShortestCF".
+ * @return A vector of team names sorted according to the specified criteria.
+ */
 QVector<QString> sort_by_teams(QMap<QString, QMap<QString, QString>> df, QString sort_by = "Team name", string filter = "Major"){
     QVector<QString> teams;
     QVector<QPair<QString, QString>> pairs;

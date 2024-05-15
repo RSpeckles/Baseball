@@ -12,11 +12,24 @@
 
 using namespace std;
 
-// DOP DOP DOP
+/**
+ * @brief Starting stadium for path finding.
+ */
 const QString START_STADIUM = "Dodger Stadium";
+
+/**
+ * @brief Ending stadium for path finding.
+ */
 const QString END_STADIUM = "Fenway Park";
 
-// this is for when we only need to visit the closest stadiums given only the number and starting stadium
+
+/**
+ * @brief Finds the closest stadiums to a given starting stadium.
+ * @param distTable The distance table between stadiums.
+ * @param start The starting stadium.
+ * @param numToVisit The number of closest stadiums to find.
+ * @return A vector of pairs containing the names of the closest stadiums and their distances.
+ */
 QVector<QPair<QString, double>> visitNumClosest(QMap<QString, QMap<QString, double>>& distTable, QString start, int numToVisit) {
     QVector<QPair<QString, double>> path;
     QString currDestination = start;
@@ -51,7 +64,11 @@ QVector<QPair<QString, double>> visitNumClosest(QMap<QString, QMap<QString, doub
     return path;
 }
 
-// read stadium distances
+/**
+ * @brief Reads stadium distances from a CSV file into a graph data structure.
+ * @param filename The filename of the CSV file containing stadium distances.
+ * @return The graph representing stadium distances.
+ */
 unordered_map<string, unordered_map<string, int>> readStadiumDistances(const string& filename) {
     ifstream file(filename);
     unordered_map<string, unordered_map<string, int>> graph;
@@ -80,7 +97,12 @@ unordered_map<string, unordered_map<string, int>> readStadiumDistances(const str
     return graph;
 }
 
-// stole this shit lmao
+/**
+ * @brief Performs Dijkstra's algorithm to find shortest paths from a starting node in a graph.
+ * @param graph The graph representation.
+ * @param start The starting node.
+ * @return A map of distances from the starting node to all other nodes.
+ */
 unordered_map<string, int> dijkstra(const unordered_map<string, unordered_map<string, int>>& graph, const string& start) {
     unordered_map<string, int> distances;
     priority_queue<pair<int, string>, vector<pair<int, string>>, greater<pair<int, string>>> pq;
@@ -113,6 +135,13 @@ unordered_map<string, int> dijkstra(const unordered_map<string, unordered_map<st
 
 // FUCK THIS SHIT https://www.youtube.com/watch?v=DRDvrqjTR7s&list=LL&index=1
 // i listedned to that osng in loop this entire time
+/**
+ * @brief Finds the closest stadiums to a given starting stadium based on pre-calculated distances.
+ * @param distances A map of distances from a starting stadium to all other stadiums.
+ * @param stadiums A vector containing the names of all stadiums.
+ * @param num_closest The number of closest stadiums to find.
+ * @return A vector of pairs containing the names of the closest stadiums and their distances.
+ */
 QVector<QPair<QString, double>> findClosestStadiums(const unordered_map<string, int>& distances, const vector<string>& stadiums, int num_closest) {
     vector<pair<string, int>> sorted_distances(distances.begin(), distances.end());
     sort(sorted_distances.begin(), sorted_distances.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
