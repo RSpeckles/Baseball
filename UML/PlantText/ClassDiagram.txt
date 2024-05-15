@@ -1,0 +1,77 @@
+@startuml
+class MainWindow {
+    - Ui::MainWindow *ui
+    - Login login
+    - Trip trip
+    - SouvenirStore souvenirStore
+    + MainWindow(QWidget *parent = nullptr)
+    + ~MainWindow()
+    + void initialize()
+    + void changePage()
+    + void changePage(QString specific)
+    + void adminLogin()
+    + void filterTeams()
+    + void viewSouvenirs()
+    + void updateSouvenirs(QString senderName)
+    + void adminTeamSelected()
+    + void adminConfirmEdit()
+    + void adminSouvenirSelected()
+    + void adminEditSouvenir()
+    + void saveToCSV()
+    + void loadFromCSV()
+    + void initializeStadiumPlan()
+    + void getDestinations()
+    + void planTrip()
+    + void startTrip()
+    + void setCurrentDestination(int index)
+    + void nextStop()
+    + void purchase()
+    + void endTripScreen(QVector<QPair<QString, double>> &totalSouvenirs)
+    + void intializeAlgorithm()
+    + void algorithmChanged()
+    + void runAlgorithm()
+}
+
+class Stadium {
+    - QString name
+    - QVector<Souvenir> souvenirs
+    + Stadium(QString name)
+    + void addSouvenir(Souvenir souvenir)
+    + QVector<Souvenir> getSouvenirs()
+}
+
+class Souvenir {
+    - QString name
+    - double price
+    + Souvenir(QString name, double price)
+    + QString getName()
+    + double getPrice()
+}
+
+class Login {
+    - QString username
+    - QString password
+    + Login(QString username, QString password)
+    + bool authenticate(QString username, QString password)
+}
+
+class Trip {
+    - QVector<Stadium> stadiums
+    + Trip()
+    + void addStadium(Stadium stadium)
+    + QVector<Stadium> getStadiums()
+}
+
+class SouvenirStore {
+    - QVector<Souvenir> souvenirs
+    + SouvenirStore()
+    + void addSouvenir(Souvenir souvenir)
+    + QVector<Souvenir> getSouvenirs()
+}
+
+MainWindow -- Stadium : Uses
+MainWindow -- Souvenir : Uses
+MainWindow -- Login : Uses
+MainWindow -- Trip : Uses
+MainWindow -- SouvenirStore : Uses
+@enduml
