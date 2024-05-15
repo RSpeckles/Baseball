@@ -7,6 +7,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include <unordered_set>
 #include <QString>
 #include <QMap>
 
@@ -62,6 +63,35 @@ QVector<QPair<QString, double>> visitNumClosest(QMap<QString, QMap<QString, doub
     }
 
     return path;
+}
+
+QVector<QPair<QString, double>> shortest_path_to_all_stadiums(const QMap<QString, QMap<QString, double>>& graph, const QString& start) {
+    QVector<QPair<QString, double>> visited_stadiums;
+    int total_distance = 0;
+    unordered_set<QString> visited;
+    visited.insert(start);
+
+    while (visited.size() < graph.size()) {
+        double min_distance = 9999999999;
+        QString next_stadium;
+
+        for (const auto& current_stadium : visited) {
+            for (auto it = graph[current_stadium].cbegin(); it != graph[current_stadium].cend(); it++) {
+                if (visited.find(it.key()) == visited.end() && it.value() < min_distance) {
+                    min_distance = it.value();
+                    next_stadium = it.key();
+                }
+            }
+        }
+
+        if (next_stadium.isEmpty()) break;
+
+        total_distance += min_distance;
+        visited.insert(next_stadium);
+        visited_stadiums.push_back({next_stadium, min_distance});
+    }
+    visited_stadiums.push_front({start, 0});
+    return visited_stadiums;
 }
 
 /**
@@ -162,6 +192,17 @@ QVector<QPair<QString, double>> findClosestStadiums(const unordered_map<string, 
             //cout << "Stadium: " << stadium << ", Distance: " << distance << endl;
             count++;
         }
+    }
+
+    return path;
+}
+
+QVector<QPair<QString, double>> closestInOrder(unordered_map<string, unordered_map<string, int>> &graph, QVector<QString> order){
+    QVector<string> visitedStadiums = {order[0].toStdString()};
+    QVector<QPair<QString, double>> path;
+    for (int i = 0; i < order.size(); i++){
+        unordered_map<string, int> distances = dijkstra(graph, order[i].toStdString());
+        path.push_back({order[i+1], distances[order[i+1].toStdString()]});
     }
 
     return path;
