@@ -75,6 +75,7 @@ public slots:
      * @param senderName The name of the sender.
      */
     void updateSouvenirs(QString senderName);
+    void viewInfo();
 
     // admin
 
