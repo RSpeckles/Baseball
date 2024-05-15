@@ -1,0 +1,16 @@
+@startuml
+actor User
+participant "MainWindow" as MW
+participant "Database" as DB
+User -> MW : navigate to "My Trips"
+MW -> DB : fetch list of planned trips
+DB --> MW : return list of planned trips
+MW -> User : display list of planned trips
+User -> MW : select a trip
+MW -> User : display trip details
+User -> MW : click "Start Trip"
+MW -> User : display first stadium and souvenirs
+User -> MW : view souvenirs, purchase souvenirs, or move to next stop
+User -> MW : continue through each stadium
+MW -> User : display summary of trip
+@enduml
