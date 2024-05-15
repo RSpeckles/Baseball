@@ -1,0 +1,262 @@
+\doxysection{parser.\+h}
+\hypertarget{parser_8h_source}{}\label{parser_8h_source}\mbox{\hyperlink{parser_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PARSER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PARSER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QDir>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QMapIterator>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{00017\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{parser_8h_aa2948cddcce2a545ee4cb1b87f16ecb9}{csv\_to\_table}}(std::string\ path,\ QMap<QString,\ QMap<QString,\ double>>\ \&dataframe)}
+\DoxyCodeLine{00018\ \{}
+\DoxyCodeLine{00019\ \ \ \ \ ifstream\ csv(path);}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordflow}{if}\ (!csv)\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Could\ not\ open\ file!\ :("{}}\ <<\ endl;}
+\DoxyCodeLine{00023\ \ \ \ \ \}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{char}\ ch;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{string}\ buffer;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ quotes\ =\ 0,\ count\ =\ 0;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{string}\ row,\ col,\ val;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ csv.ignore(1000,\ \textcolor{charliteral}{'\(\backslash\)n'});}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordflow}{while}\ ((ch\ =\ csv.get())\ !=\ EOF)\ \{}
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ ch\ <<\ endl;}}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ch\ ==\ \textcolor{charliteral}{','}\ \&\&\ quotes\ \%\ 2\ ==\ 0)\ \{}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (count\ \%\ 2)\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0:}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row.assign(buffer);}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 1:}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}Case\ 1"{}\ <<\ endl;}}
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ col.assign(buffer);}
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}COL:\ "{}\ <<\ col\ <<\ endl;}}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \ \ \ \ count\ +=\ 1;}
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \ \ \ \ buffer.assign(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (ch\ ==\ \textcolor{charliteral}{'\(\backslash\)n'})\ \{}
+\DoxyCodeLine{00048\ \ \ \ \ \ \ \ \ \ \ \ \ val.assign(buffer);}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}VAL:\ "{}\ <<\ val\ <<\ endl;}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ buffer.assign(\textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ row\ <<\ "{}\ -\/\ "{}\ <<\ col\ <<\ "{}\ -\/\ "{}\ <<\ val\ <<\ endl;}}
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ dataframe[QString::fromStdString(row)][QString::fromStdString(col)]\ =\ std::stof(val);}
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (ch\ ==\ \textcolor{charliteral}{'\(\backslash\)"{}'})\ \{}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \ \ \ \ quotes\ +=\ 1;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ buffer\ +=\ ch;}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00062\ \ \ \ \ \}}
+\DoxyCodeLine{00063\ \}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00070\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{parser_8h_ad263617a176fbdab4a8f984c7181c01d}{csv\_to\_df}}(std::string\ path,\ QMap<QString,\ QMap<QString,\ QString>>\ \&dataframe)}
+\DoxyCodeLine{00071\ \{}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ "{}AAA"{}\ <<\ endl;}}
+\DoxyCodeLine{00073\ \ \ \ \ ifstream\ csv(path);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordflow}{if}\ (!csv)\ \{}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Could\ not\ open\ file!\ :("{}}\ <<\ endl;}
+\DoxyCodeLine{00077\ \ \ \ \ \}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{char}\ buffer[1024];}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{int}\ numCols\ =\ 0;}
+\DoxyCodeLine{00081\ \ \ \ \ QVector<QString>\ colNames;}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \ \ \ \ csv.getline(buffer,\ 1024);}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ strlen(buffer);\ i++)\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ buffer[i]\ <<\ "{}\ "{};}}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (buffer[i]\ ==\ \textcolor{charliteral}{','})\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ numCols++;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00090\ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ cout\ <<\ endl;}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{char}\ *temp\ =\ strtok(buffer,\ \textcolor{stringliteral}{"{}¿"{}});}
+\DoxyCodeLine{00094\ \ \ \ \ temp\ =\ strtok(NULL,\ \textcolor{stringliteral}{"{},"{}});}
+\DoxyCodeLine{00095\ \ \ \ \ colNames.append(temp);}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ temp\ <<\ endl;}}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <=\ numCols;\ i++)\ \{}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ temp\ =\ strtok(NULL,\ \textcolor{stringliteral}{"{},"{}});}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ colNames.append(temp);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ temp\ <<\ endl;}}
+\DoxyCodeLine{00101\ \ \ \ \ \}}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{char}\ ch;}
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keywordtype}{string}\ strBuffer,\ row;}
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ quotes\ =\ 0,\ count\ =\ 0;}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ QVector<QString>::Iterator\ iter\ =\ colNames.begin();}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keywordflow}{while}\ ((ch\ =\ csv.get())\ !=\ EOF)\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((ch\ ==\ \textcolor{charliteral}{','}\ \&\&\ quotes\ \%\ 2\ ==\ 0))\ \{}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (iter\ ==\ colNames.begin())\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ row\ =\ strBuffer;}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dataframe[QString::fromStdString(row)];}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ row\ <<\ endl;}}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ dataframe[QString::fromStdString(row)][*iter]\ =\ QString::fromStdString(strBuffer);}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ strBuffer\ <<\ "{}\ -\/\ "{};}}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ iter++;}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ strBuffer\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (ch\ ==\ \textcolor{charliteral}{'\(\backslash\)n'})\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ strBuffer\ <<\ endl;}}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ dataframe[QString::fromStdString(row)][*iter]\ =\ QString::fromStdString(strBuffer);}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ iter++;}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ strBuffer\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ iter\ =\ colNames.begin();}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (ch\ ==\ \textcolor{charliteral}{'\(\backslash\)"{}'})\ \{}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ quotes\ +=\ 1;}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ strBuffer\ +=\ ch;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{//\ cout\ <<\ dataframe["{}Arizona\ Diamondbacks"{}]["{}League"{}].toStdString()\ <<\ endl;}}
+\DoxyCodeLine{00135\ \}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \textcolor{comment}{//Write\ stuff\ to\ CSV\ file\ from\ dataframe}}
+\DoxyCodeLine{00139\ \textcolor{comment}{//First\ parameter\ is\ full\ path\ of\ file\ you\ want\ to\ write\ to}}
+\DoxyCodeLine{00140\ \textcolor{comment}{//Second\ parameter\ is\ dataframe\ map\ you're\ writing\ from}}
+\DoxyCodeLine{00141\ \textcolor{comment}{//Last\ parameter\ is\ title\ of\ rows.\ Write\ as\ one\ string,\ with\ titles\ separated\ by\ commas.\ No\ Spaces}}
+\DoxyCodeLine{00142\ \textcolor{comment}{//eg.\ "{}Team\ name,Souvenir,Cost"{}}}
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \textcolor{comment}{//\ souvenirTable}}
+\DoxyCodeLine{00151\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{parser_8h_a1100ebf2e60ecd5f4bc8dd57c2c90535}{df\_to\_csv}}(\textcolor{keywordtype}{string}\ path,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QMap<QString,\ QMap<QString,\ double>>\ \textcolor{keyword}{const}\ dataframe,}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\ label)}
+\DoxyCodeLine{00154\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ ofstream\ csv;}
+\DoxyCodeLine{00156\ \ \ \ \ cout\ <<\ path\ <<\ endl;}
+\DoxyCodeLine{00157\ \ \ \ \ csv.open(path);}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \textcolor{keywordflow}{if}\ (!csv)\ \{}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Could\ not\ open\ file!\ :("{}}\ <<\ endl;}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00162\ \ \ \ \ \}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ csv\ <<\ label.toStdString()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ i\ =\ dataframe.begin();\ i\ !=\ dataframe.end();\ i++)\ \{}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ j\ =\ i-\/>begin();\ j\ !=\ i-\/>end();\ j++)\ \{}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ flag\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}\ (QChar\ c,\ i.key())\ \{}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{','})\ \{}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flag)\ \{}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}\ <<\ i.key().toStdString()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ i.key().toStdString()\ <<\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \ \ \ \ flag\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}\ (QChar\ c,\ j.key())\ \{}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{','})\ \{}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flag)}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}\ <<\ j.key().toStdString()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ j.key().toStdString()\ <<\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ fixed\ <<\ setprecision(2)\ <<\ j.value()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00198\ \ \ \ \ \}}
+\DoxyCodeLine{00199\ \}}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00207\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{parser_8h_a1100ebf2e60ecd5f4bc8dd57c2c90535}{df\_to\_csv}}(\textcolor{keywordtype}{string}\ path,}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QMap<QString,\ QMap<QString,\ QString>>\ \textcolor{keyword}{const}\ dataframe,}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QString\ label)}
+\DoxyCodeLine{00210\ \{}
+\DoxyCodeLine{00211\ \ \ \ \ ofstream\ csv;}
+\DoxyCodeLine{00212\ \ \ \ \ cout\ <<\ path\ <<\ endl;}
+\DoxyCodeLine{00213\ \ \ \ \ csv.open(path);}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keywordflow}{if}\ (!csv)\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Could\ not\ open\ file!\ :("{}}\ <<\ endl;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{comment}{/*\ THIS\ IS\ UTTERLY\ FUCKING\ AUTISTIC}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ *\ basically\ to\ save\ to\ the\ MLB\ Information.csv\ correctly\ we\ have\ to\ write\ it\ as\ UTF-\/8\ BOM}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ *\ i\ have\ no\ idea\ what\ this\ means\ but\ we\ need\ this\ so\ that\ it\ reads\ in\ correctly\ next\ time\ we\ open\ the\ app}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ *\ I\ honestly\ have\ no\ fucking\ idea\ how\ other\ groups\ will\ figure\ this\ out\ SO\ THANKS\ THIS\ PROJECT\ FUCKING\ SUCKS}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ *\ -\/\ Nico\ 5/3/2023\ 7:35pm}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ bom[]\ =\ \{\ 0xEF,0xBB,0xBF\ \};}
+\DoxyCodeLine{00227\ \ \ \ \ csv.write((\textcolor{keywordtype}{char}*)bom,\ \textcolor{keyword}{sizeof}(bom));}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{comment}{//\ add\ columns}}
+\DoxyCodeLine{00230\ \ \ \ \ csv\ <<\ label.toStdString()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{comment}{/*\ split\ columns\ string\ so\ that\ we\ can\ find\ it\ in\ the\ dataframe\ rather\ than\ iterating\ thru\ each\ key}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \ *\ QMaps\ automatically\ order\ keys\ alphabetically,\ the\ provided\ CSV\ isnt\ sorted\ alphabetically}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ *\ THIS\ IS\ THE\ ONLY\ WAY\ MUAHAHH!!!!!!}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{00236\ \ \ \ \ \textcolor{keywordtype}{string}\ s\ =\ label.toStdString();}
+\DoxyCodeLine{00237\ \ \ \ \ \textcolor{keywordtype}{string}\ delimiter\ =\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ pos\ =\ 0;}
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{keywordtype}{string}\ token;}
+\DoxyCodeLine{00241\ \ \ \ \ vector<QString>\ keys;}
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordflow}{while}\ ((pos\ =\ s.find(delimiter))\ !=\ std::string::npos)\ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ token\ =\ s.substr(0,\ pos);}
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ keys.push\_back((QString::fromStdString(token)));}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ s.erase(0,\ pos\ +\ delimiter.length());}
+\DoxyCodeLine{00246\ \ \ \ \ \}}
+\DoxyCodeLine{00247\ \ \ \ \ keys.push\_back((QString::fromStdString(s)));}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\ i\ =\ dataframe.begin();\ i\ !=\ dataframe.end();\ i++)\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ index\ =\ 0;}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (QString\ key\ :\ keys)\ \{}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ check\ if\ it\ exists}}
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//qDebug()\ <<\ key;}}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i.value().find(key)\ ==\ i-\/>end())\ \{;\ \textcolor{keywordflow}{continue};\ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ flag\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}\ (QChar\ c,\ i.value()[key])\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{','})\ \{}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (flag)\ \{}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}\ <<\ i.value()[key].toStdString()\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)"{}"{}}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ <<\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ i.value()[key].toStdString();}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (keys.size()-\/1\ >\ index)\ \{}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ csv\ <<\ \textcolor{stringliteral}{"{},"{}};}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ index++;}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ csv\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{00275\ \ \ \ \ \}}
+\DoxyCodeLine{00276\ \}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ PARSER\_H}}
+
+\end{DoxyCode}

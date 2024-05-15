@@ -1,0 +1,245 @@
+\doxysection{algorithms.\+h}
+\hypertarget{algorithms_8h_source}{}\label{algorithms_8h_source}\mbox{\hyperlink{algorithms_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ ALGORITHMS\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ ALGORITHMS\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <QDebug>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <QString>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <QMap>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <QIODevice>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <QFile>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <queue>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <QQueue>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_distance}{Distance}}\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ QString\ \mbox{\hyperlink{struct_distance_a1d49dbc8aeae5efbb5286afde9ff8f9d}{srcStadium}};}
+\DoxyCodeLine{00028\ \ \ \ \ QString\ \mbox{\hyperlink{struct_distance_a369a3e898e7d903522583730d47acbc6}{destStadium}};}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_distance_aa6bf08ff0edfbfc04ec6334279c4e9c7}{distance}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ \mbox{\hyperlink{struct_distance_a7c1d31f1eccd4c2c362ca29239121aec}{Distance}}(\textcolor{keyword}{const}\ QString\&\ src,\ \textcolor{keyword}{const}\ QString\&\ dest,\ \textcolor{keywordtype}{int}\ dist)\ :\ \mbox{\hyperlink{struct_distance_a1d49dbc8aeae5efbb5286afde9ff8f9d}{srcStadium}}(src),\ \mbox{\hyperlink{struct_distance_a369a3e898e7d903522583730d47acbc6}{destStadium}}(dest),\ \mbox{\hyperlink{struct_distance_aa6bf08ff0edfbfc04ec6334279c4e9c7}{distance}}(dist)\ \{\}}
+\DoxyCodeLine{00032\ \};}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_stadium}{Stadium}}\ \{}
+\DoxyCodeLine{00039\ \ \ \ \ QString\ \mbox{\hyperlink{struct_stadium_a5147f167b58007d5b7116834b889abf3}{name}};}
+\DoxyCodeLine{00040\ \ \ \ \ std::vector<std::pair<QString,\ int>>\ \mbox{\hyperlink{struct_stadium_a434b7a52bb13fddfd8917abf08b63239}{connections}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{struct_stadium_a590fc521914438820bf5ab2f27d2d749}{Stadium}}()\ \{\}\ \textcolor{comment}{//\ Default\ constructor}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{struct_stadium_a216bad57edbea4804c96521f666c4b1b}{Stadium}}(\textcolor{keyword}{const}\ QString\&\ n)\ :\ \mbox{\hyperlink{struct_stadium_a5147f167b58007d5b7116834b889abf3}{name}}(n)\ \{\}\ \textcolor{comment}{//\ Constructor\ with\ name\ argument}}
+\DoxyCodeLine{00045\ \};}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_edge}{Edge}}\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_edge_aa303076ddd39bd92c470bea7fbf36aaf}{src}};}
+\DoxyCodeLine{00053\ \ \ \ \ std::string\ \mbox{\hyperlink{struct_edge_a90fd2eb3e47e39061ce7cd84694657cc}{dest}};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_edge_a4d58e1f4de38fa55549497175981ebab}{weight}};}
+\DoxyCodeLine{00055\ \ \ \ \ \mbox{\hyperlink{struct_edge_a96ec249e5e906fc82eda0a0bb45bd748}{Edge}}(std::string\ s,\ std::string\ d,\ \textcolor{keywordtype}{int}\ w)\ :\ \mbox{\hyperlink{struct_edge_aa303076ddd39bd92c470bea7fbf36aaf}{src}}(s),\ \mbox{\hyperlink{struct_edge_a90fd2eb3e47e39061ce7cd84694657cc}{dest}}(d),\ \mbox{\hyperlink{struct_edge_a4d58e1f4de38fa55549497175981ebab}{weight}}(w)\ \{\}}
+\DoxyCodeLine{00056\ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00062\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_compare_edge}{CompareEdge}}\ \{}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_compare_edge_a1f8da18dc44a03fe55178c6c7dc9dcd1}{operator()}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_edge}{Edge}}\&\ e1,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{struct_edge}{Edge}}\&\ e2)\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ e1.\mbox{\hyperlink{struct_edge_a4d58e1f4de38fa55549497175981ebab}{weight}}\ >\ e2.\mbox{\hyperlink{struct_edge_a4d58e1f4de38fa55549497175981ebab}{weight}};}
+\DoxyCodeLine{00065\ \ \ \ \ \}}
+\DoxyCodeLine{00066\ \};}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00073\ std::vector<Distance>\ \mbox{\hyperlink{algorithms_8h_affc9c7daf16de5723a81aa5157f45b40}{parseDistanceCSV}}(\textcolor{keyword}{const}\ QString\&\ filename)\ \{}
+\DoxyCodeLine{00074\ \ \ \ \ std::vector<Distance>\ distances;}
+\DoxyCodeLine{00075\ \ \ \ \ QFile\ file(filename);}
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordflow}{if}\ (!file.open(QIODevice::ReadOnly\ |\ QIODevice::Text))\ \{}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ qDebug()\ <<\ \textcolor{stringliteral}{"{}Error\ opening\ file"{}}\ <<\ filename;}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ distances;}
+\DoxyCodeLine{00079\ \ \ \ \ \}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ QTextStream\ in(\&file);}
+\DoxyCodeLine{00082\ \ \ \ \ in.readLine();}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordflow}{while}\ (!in.atEnd())\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ QString\ line\ =\ in.readLine();}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ QStringList\ parts\ =\ line.split(\textcolor{stringliteral}{"{},"{}});}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (parts.size()\ <\ 3)\ \{}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ qWarning()\ <<\ \textcolor{stringliteral}{"{}Invalid\ line:"{}}\ <<\ line;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ QString\ src\ =\ parts[0];}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ QString\ dest\ =\ parts[1];}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ distance\ =\ parts[2].toInt();}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ distances.emplace\_back(src,\ dest,\ distance);}
+\DoxyCodeLine{00096\ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00098\ \ \ \ \ file.close();}
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordflow}{return}\ distances;}
+\DoxyCodeLine{00100\ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00107\ std::vector<Stadium>\ \mbox{\hyperlink{algorithms_8h_a511ae46297b565c6c28acca8d536b784}{buildGraph}}(\textcolor{keyword}{const}\ std::vector<Distance>\&\ distances)\ \{}
+\DoxyCodeLine{00108\ \ \ \ \ std::unordered\_set<QString>\ uniqueStadiums;}
+\DoxyCodeLine{00109\ \ \ \ \ std::vector<Stadium>\ graph;}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ distance\ :\ distances)\ \{}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ uniqueStadiums.insert(distance.srcStadium);}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ uniqueStadiums.insert(distance.destStadium);}
+\DoxyCodeLine{00114\ \ \ \ \ \}}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ stadiumName\ :\ uniqueStadiums)\ \{}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ graph.emplace\_back(stadiumName);}
+\DoxyCodeLine{00118\ \ \ \ \ \}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ distance\ :\ distances)\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{auto}\&\ stadium\ :\ graph)\ \{}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (stadium.name\ ==\ distance.srcStadium)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stadium.connections.emplace\_back(distance.destStadium,\ distance.distance);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordflow}{return}\ graph;}
+\DoxyCodeLine{00129\ \}}
+\DoxyCodeLine{00134\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{algorithms_8h_aa96a8f013c928f8c8196958285c7bf8a}{printMSTPath}}(\textcolor{keyword}{const}\ std::unordered\_map<QString,\ QString>\&\ parent)\ \{}
+\DoxyCodeLine{00135\ \ \ \ \ qDebug()\ <<\ \textcolor{stringliteral}{"{}Minimum\ Spanning\ Tree\ Path:"{}};}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [child,\ parent]\ :\ parent)\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ qDebug()\ <<\ parent\ <<\ \textcolor{stringliteral}{"{}\ -\/>\ "{}}\ <<\ child;}
+\DoxyCodeLine{00138\ \ \ \ \ \}}
+\DoxyCodeLine{00139\ \}}
+\DoxyCodeLine{00144\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_stadium_q}{StadiumQ}}\ \{}
+\DoxyCodeLine{00145\ \ \ \ \ QString\ \mbox{\hyperlink{struct_stadium_q_a49d282b3a65fcf179c7606915459fa4a}{name}};}
+\DoxyCodeLine{00146\ \ \ \ \ QMap<QString,\ int>\ \mbox{\hyperlink{struct_stadium_q_abf4b1b050cac131e25edc40c4754c9b9}{connections}};}
+\DoxyCodeLine{00147\ \};}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00155\ QMap<QString,\ StadiumQ>\ \mbox{\hyperlink{algorithms_8h_aa661178639f18c90b138e3a245c92cf7}{parseCSV}}(\textcolor{keyword}{const}\ QString\&\ filename)\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ QMap<QString,\ StadiumQ>\ graph;}
+\DoxyCodeLine{00157\ \ \ \ \ QFile\ file(filename);}
+\DoxyCodeLine{00158\ \ \ \ \ \textcolor{keywordflow}{if}\ (!file.open(QIODevice::ReadOnly\ |\ QIODevice::Text))\ \{}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ qDebug()\ <<\ \textcolor{stringliteral}{"{}Error\ opening\ file"{}};}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ graph;}
+\DoxyCodeLine{00161\ \ \ \ \ \}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ QTextStream\ in(\&file);}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{keywordflow}{while}\ (!in.atEnd())\ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ QString\ line\ =\ in.readLine();}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ QStringList\ parts\ =\ line.split(\textcolor{stringliteral}{"{},"{}});}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ QString\ origin\ =\ parts[0];}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ QString\ destination\ =\ parts[1];}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ distance\ =\ parts[2].toDouble();}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!graph.contains(origin))}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ graph[origin]\ =\ \{origin,\ \{\}\};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!graph.contains(destination))}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ graph[destination]\ =\ \{destination,\ \{\}\};}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ graph[origin].connections[destination]\ =\ distance;}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ graph[destination].connections[origin]\ =\ distance;}
+\DoxyCodeLine{00179\ \ \ \ \ \}}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ file.close();}
+\DoxyCodeLine{00182\ \ \ \ \ \textcolor{keywordflow}{return}\ graph;}
+\DoxyCodeLine{00183\ \}}
+\DoxyCodeLine{00189\ std::unordered\_map<std::string,\ std::vector<std::pair<std::string,\ int>>>\ \mbox{\hyperlink{algorithms_8h_ab55e4daeafee710a09ed692cab757c13}{parseCSV2}}(\textcolor{keyword}{const}\ QString\&\ file\_path)\ \{}
+\DoxyCodeLine{00190\ \ \ \ \ std::ifstream\ file(file\_path.toStdString());}
+\DoxyCodeLine{00191\ \ \ \ \ std::unordered\_map<std::string,\ std::vector<std::pair<std::string,\ int>>>\ graph;}
+\DoxyCodeLine{00192\ \ \ \ \ std::string\ line;}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordflow}{if}\ (file.is\_open())\ \{}
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ getline(file,\ line);}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (getline(file,\ line))\ \{}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ std::stringstream\ ss(line);}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ std::string\ src,\ dest,\ weight\_str;}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ getline(ss,\ src,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ getline(ss,\ dest,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ getline(ss,\ weight\_str,\ \textcolor{charliteral}{','});}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ weight\ =\ stoi(weight\_str);}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ graph[src].push\_back(\{dest,\ weight\});}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ graph[dest].push\_back(\{src,\ weight\});}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ file.close();}
+\DoxyCodeLine{00210\ \ \ \ \ \}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordflow}{return}\ graph;}
+\DoxyCodeLine{00213\ \}}
+\DoxyCodeLine{00221\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{algorithms_8h_af3b3bb98f17c23db2247eb6ce0e62771}{dfs}}(\textcolor{keyword}{const}\ QMap<QString,\ StadiumQ>\&\ graph,\ \textcolor{keyword}{const}\ QString\&\ startStadium,\ QMap<QString,\ bool>\&\ visited)\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ visited[startStadium]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{int}\ totalDistance\ =\ 0;}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{comment}{//qDebug()\ <<\ "{}Visited:"{}\ <<\ startStadium;}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{auto}\ it\ =\ graph.find(startStadium);}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordflow}{if}\ (it\ ==\ graph.end())\ \{}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ qWarning()\ <<\ \textcolor{stringliteral}{"{}Error:\ Starting\ stadium\ not\ found\ in\ the\ graph."{}};}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ totalDistance;}
+\DoxyCodeLine{00231\ \ \ \ \ \}}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ adjacentStadium\ :\ it.value().connections.keys())\ \{}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!visited[adjacentStadium])\ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ distance\ =\ it.value().connections.value(adjacentStadium);}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//qDebug()\ <<\ "{}Traversing\ from"{}\ <<\ startStadium\ <<\ "{}to"{}\ <<\ adjacentStadium\ <<\ "{}(Distance:"{}\ <<\ distance\ <<\ "{}miles)"{};}}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ totalDistance\ +=\ distance\ +\ \mbox{\hyperlink{algorithms_8h_af3b3bb98f17c23db2247eb6ce0e62771}{dfs}}(graph,\ adjacentStadium,\ visited);}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00239\ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keywordflow}{return}\ totalDistance;}
+\DoxyCodeLine{00242\ \}}
+\DoxyCodeLine{00250\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{algorithms_8h_a14ffa130d6cdc788284539b66c57cd72}{bfs}}(\textcolor{keyword}{const}\ QMap<QString,\ StadiumQ>\&\ graph,\ \textcolor{keyword}{const}\ QString\&\ startStadium)\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ QMap<QString,\ int>\ mileage;}
+\DoxyCodeLine{00252\ \ \ \ \ QQueue<QString>\ q;}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ key\ :\ graph.keys())\ \{}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ mileage[key]\ =\ INT\_MAX;}
+\DoxyCodeLine{00255\ \ \ \ \ \}}
+\DoxyCodeLine{00256\ \ \ \ \ q.enqueue(startStadium);}
+\DoxyCodeLine{00257\ \ \ \ \ mileage[startStadium]\ =\ 0;}
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{int}\ totalDistance\ =\ 0;}
+\DoxyCodeLine{00259\ \ \ \ \ \textcolor{keywordflow}{while}\ (!q.isEmpty())\ \{}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ QString\ currentStadium\ =\ q.dequeue();}
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ adjacentStadium\ :\ graph[currentStadium].connections.keys())\ \{}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (mileage[currentStadium]\ +\ graph[currentStadium].connections[adjacentStadium]\ <\ mileage[adjacentStadium])\ \{}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mileage[adjacentStadium]\ =\ mileage[currentStadium]\ +\ graph[currentStadium].connections[adjacentStadium];}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ q.enqueue(adjacentStadium);}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ totalDistance\ +=\ graph[currentStadium].connections[adjacentStadium];}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00268\ \ \ \ \ \}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keywordflow}{return}\ totalDistance;}
+\DoxyCodeLine{00271\ \}}
+\DoxyCodeLine{00277\ std::vector<Edge>\ \mbox{\hyperlink{algorithms_8h_a2130387bbcf468d34db0f724955f216f}{primMST}}(\textcolor{keyword}{const}\ std::unordered\_map<std::string,\ std::vector<std::pair<std::string,\ int>>>\&\ graph)\ \{}
+\DoxyCodeLine{00278\ \ \ \ \ std::vector<Edge>\ mst;}
+\DoxyCodeLine{00279\ \ \ \ \ std::unordered\_map<std::string,\ bool>\ visited;}
+\DoxyCodeLine{00280\ \ \ \ \ std::priority\_queue<Edge,\ std::vector<Edge>,\ \mbox{\hyperlink{struct_compare_edge}{CompareEdge}}>\ pq;}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ edge\ :\ graph.begin()-\/>second)\ \{}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ pq.push(\{graph.begin()-\/>first,\ edge.first,\ edge.second\});}
+\DoxyCodeLine{00284\ \ \ \ \ \}}
+\DoxyCodeLine{00285\ \ \ \ \ visited[graph.begin()-\/>first]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordflow}{while}\ (!pq.empty())\ \{}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_edge}{Edge}}\ min\_edge\ =\ pq.top();}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ pq.pop();}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (visited[min\_edge.\mbox{\hyperlink{struct_edge_a90fd2eb3e47e39061ce7cd84694657cc}{dest}}])\ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ mst.push\_back(min\_edge);}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ visited[min\_edge.\mbox{\hyperlink{struct_edge_a90fd2eb3e47e39061ce7cd84694657cc}{dest}}]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ edge\ :\ graph.at(min\_edge.\mbox{\hyperlink{struct_edge_a90fd2eb3e47e39061ce7cd84694657cc}{dest}}))\ \{}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!visited[edge.first])\ \{}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pq.push(\{min\_edge.\mbox{\hyperlink{struct_edge_a90fd2eb3e47e39061ce7cd84694657cc}{dest}},\ edge.first,\ edge.second\});}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00301\ \ \ \ \ \}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \ \ \ \ \textcolor{keywordflow}{return}\ mst;}
+\DoxyCodeLine{00304\ \}}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ ALGORITHMS\_H}}
+
+\end{DoxyCode}
